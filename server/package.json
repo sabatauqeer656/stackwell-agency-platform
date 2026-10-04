@@ -1,0 +1,10 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Nexora Labs API (Express + MongoDB)",
+  "scripts": {
+    "dev": "node -e \"console.log('server: no code yet (added in the next step)')\""
+  }
+}
