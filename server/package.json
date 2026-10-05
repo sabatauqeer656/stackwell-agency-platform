@@ -5,6 +5,10 @@
   "type": "module",
   "description": "Nexora Labs API (Express + MongoDB)",
   "scripts": {
-    "dev": "node -e \"console.log('server: no code yet (added in the next step)')\""
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
