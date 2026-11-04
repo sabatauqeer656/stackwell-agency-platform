@@ -14,6 +14,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().positive().default(5000),
   CLIENT_URL: z.url(),
+  MONGO_URI: z
+    .string()
+    .regex(/^mongodb(\+srv)?:\/\//, 'must start with mongodb:// or mongodb+srv://'),
 });
 
 const result = envSchema.safeParse(process.env);

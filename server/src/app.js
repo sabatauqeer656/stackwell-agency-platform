@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -10,7 +11,11 @@ app.use(express.json());
 app.get('/api/v1/health', (req, res) => {
   res.json({
     success: true,
-    data: { status: 'ok', uptime: process.uptime() },
+    data: {
+      status: 'ok',
+      uptime: process.uptime(),
+      database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    },
   });
 });
 
