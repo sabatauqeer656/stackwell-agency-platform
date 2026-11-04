@@ -1,4 +1,5 @@
 import express from 'express';
+import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 
@@ -12,5 +13,9 @@ app.get('/api/v1/health', (req, res) => {
     data: { status: 'ok', uptime: process.uptime() },
   });
 });
+
+// Must stay LAST: unmatched routes -> 404, then every error -> one JSON reply
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
