@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { env } from './config/env.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
@@ -28,6 +29,9 @@ if (env.NODE_ENV !== 'test') {
 
 // Parse JSON request bodies into req.body
 app.use(express.json());
+
+// Reads cookies into req.cookies (the refresh token lives in one)
+app.use(cookieParser());
 
 // Health check: lets us (and later, hosting platforms) confirm the API is alive
 app.get('/api/v1/health', (req, res) => {

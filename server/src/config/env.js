@@ -23,6 +23,10 @@ const envSchema = z.object({
   // Access tokens are short-lived on purpose (e.g. 15m, 1h). Refresh tokens come in the next step.
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
 
+  // Refresh tokens last days, live in an httpOnly cookie, and use a DIFFERENT secret.
+  JWT_REFRESH_SECRET: z.string().min(32, 'must be at least 32 characters'),
+  JWT_REFRESH_EXPIRES_DAYS: z.coerce.number().int().positive().default(7),
+
   // Only read by `npm run seed:admin` to create the first admin account
   ADMIN_NAME: z.string().optional(),
   ADMIN_EMAIL: z.string().optional(),
