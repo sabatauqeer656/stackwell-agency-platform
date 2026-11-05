@@ -14,6 +14,18 @@ export const errorHandler = (err, req, res, next) => {
     err = new AppError('Invalid JSON in request body', 400);
   }
 
+  // Database errors we can explain to the client instead of calling them "500 bugs"
+  if (err.code === 11000) {
+    // Unique index violated, e.g. a slug or email that already exists
+    const field = Object.keys(err.keyPattern ?? err.keyValue ?? {})[0] ?? 'value';
+    err = new AppError(`That ${field} is already in use`, 409, 'DUPLICATE_VALUE');
+  } else if (err.name === 'CastError') {
+    err = new AppError(`Invalid ${err.path}`, 400, 'INVALID_ID');
+  } else if (err.name === 'ValidationError' && err.errors) {
+    const details = Object.values(err.errors).map((e) => ({ field: e.path, message: e.message }));
+    err = new AppError('Validation failed', 400, 'VALIDATION_ERROR', details);
+  }
+
   const statusCode = err.statusCode || 500;
   const isOperational = err.isOperational === true;
 
