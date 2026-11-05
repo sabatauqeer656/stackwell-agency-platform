@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
+    "seed": "node src/seed/seed.js",
     "seed:admin": "node src/seed/createAdmin.js"
   },
   "dependencies": {

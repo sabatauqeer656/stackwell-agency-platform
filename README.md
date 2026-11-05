@@ -25,9 +25,15 @@ npm install
 
 # 2. Configure the server
 cp server/.env.example server/.env
-#    then edit server/.env and set MONGO_URI to your connection string
+#    then edit server/.env: set MONGO_URI and generate the two JWT secrets with
+#    node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 
-# 3. Run the client and the API together
+# 3. Add demo content (services, projects, FAQs...) and your admin account
+npm run seed
+#    for the admin: set ADMIN_NAME, ADMIN_EMAIL and ADMIN_PASSWORD in server/.env, then
+npm run seed:admin
+
+# 4. Run the client and the API together
 npm run dev
 ```
 
@@ -45,7 +51,12 @@ Server (`server/.env`), validated with Zod at startup. The server refuses to sta
 | `NODE_ENV` | no | `development` | `development`, `production` or `test` |
 | `PORT` | no | `5000` | Port the API listens on |
 | `CLIENT_URL` | yes | | Origin of the React app, used for the CORS allowlist |
-| `MONGO_URI` | yes | | MongoDB connection string (contains credentials, never commit it) |
+| `MONGO_URI` | yes | | MongoDB connection string (contains credentials, never commit it). Include a database name, e.g. `.../stackwell?...` |
+| `JWT_ACCESS_SECRET` | yes | | Signs short-lived access tokens (min 32 characters) |
+| `JWT_ACCESS_EXPIRES_IN` | no | `15m` | Access token lifetime |
+| `JWT_REFRESH_SECRET` | yes | | Signs refresh tokens (min 32 characters, different from the access secret) |
+| `JWT_REFRESH_EXPIRES_DAYS` | no | `7` | Refresh token lifetime in days |
+| `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | no | | Only read by `npm run seed:admin`. Remove the password afterwards |
 
 Client (`client/.env`): `VITE_API_URL`, the API base URL. Variables prefixed `VITE_` are public; never put secrets in them.
 
@@ -59,6 +70,11 @@ Run from the project root.
 | `npm run build` | Builds the client for production into `client/dist` |
 | `npm start` | Starts the server without file watching (production) |
 | `npm run lint` | Lints the client |
+| `npm run seed` | Adds demo content that is missing. Safe to run again: existing content is never overwritten |
+| `npm run seed -- --reset --yes` | Deletes all site content, then re-adds the demo content. Users, inquiries and quote requests are never touched |
+| `npm run seed:admin` | Creates the first admin account from the `ADMIN_*` values in `server/.env` |
+
+All demo content is fictional: the company, clients, people and numbers were invented for this portfolio project.
 
 ## Project structure
 
