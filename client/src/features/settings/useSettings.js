@@ -20,15 +20,20 @@ const fetchSettings = async () => {
   return response.data.data; // the API wraps everything as { success, data }
 };
 
-// Company name, contact details and social links, edited by admins in the dashboard.
-// TanStack Query caches the result, so Navbar and Footer share ONE request.
-export function useSettings() {
-  const { data } = useQuery({
+// The raw query: use it when a page needs to know about loading and error states
+// (for example the Contact page, whose whole purpose is to show these details).
+// TanStack Query caches the result, so every component shares ONE request.
+export function useSettingsQuery() {
+  return useQuery({
     queryKey: ['settings'],
     queryFn: fetchSettings,
     staleTime: 10 * 60 * 1000, // these rarely change: reuse for 10 minutes
   });
+}
 
-  // Real values win; anything missing falls back to the defaults
+// Company name, contact details and social links, edited by admins in the dashboard.
+// Always returns a complete object: real values win, anything missing falls back to the defaults.
+export function useSettings() {
+  const { data } = useSettingsQuery();
   return { ...DEFAULT_SETTINGS, ...data };
 }

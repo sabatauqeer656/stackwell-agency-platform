@@ -8,6 +8,7 @@ import ProjectDetail from '../pages/public/ProjectDetail.jsx';
 import Solutions from '../pages/public/Solutions.jsx';
 import About from '../pages/public/About.jsx';
 import Faq from '../pages/public/Faq.jsx';
+import Contact from '../pages/public/Contact.jsx';
 import SolutionDetail from '../pages/public/SolutionDetail.jsx';
 import DesignPreview from '../pages/public/DesignPreview.jsx';
 import LayoutPreview from '../pages/public/LayoutPreview.jsx';
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
       { path: '/solutions/:slug', element: <SolutionDetail /> },
       { path: '/about', element: <About /> },
       { path: '/faq', element: <Faq /> },
+      { path: '/contact', element: <Contact /> },
       { path: '*', element: <NotFound /> },
     ],
   },
