@@ -1,10 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import Hero from '../../components/sections/Hero.jsx';
 import ServicesSection from '../../components/sections/ServicesSection.jsx';
+import FeaturedProjectsSection from '../../components/sections/FeaturedProjectsSection.jsx';
+import TestimonialsSection from '../../components/sections/TestimonialsSection.jsx';
+import CallToAction from '../../components/sections/CallToAction.jsx';
 import { useSettings } from '../../features/settings/useSettings.js';
 
-// The home page is just a list of sections. Featured projects, testimonials and the closing
-// call to action are added in the next step.
+// The home page is just a list of sections: each one loads its own data and handles its own states.
 export default function Home() {
   const { companyName } = useSettings();
 
@@ -20,6 +22,9 @@ export default function Home() {
       </Helmet>
       <Hero />
       <ServicesSection />
+      <FeaturedProjectsSection />
+      <TestimonialsSection />
+      <CallToAction />
     </>
   );
 }
