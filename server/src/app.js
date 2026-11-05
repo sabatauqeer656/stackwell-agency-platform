@@ -1,8 +1,29 @@
 import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import morgan from 'morgan';
 import mongoose from 'mongoose';
+import { env } from './config/env.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
+
+// Security headers
+app.use(helmet());
+
+// Only our React app may call this API from a browser.
+// credentials: true lets the browser send cookies (needed for the refresh token later).
+app.use(
+  cors({
+    origin: new URL(env.CLIENT_URL).origin, // strips any trailing slash/path
+    credentials: true,
+  })
+);
+
+// Request logging: concise in development, standard Apache-style in production
+if (env.NODE_ENV !== 'test') {
+  app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+}
 
 // Parse JSON request bodies into req.body
 app.use(express.json());
