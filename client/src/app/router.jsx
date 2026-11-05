@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import PublicLayout from '../components/layout/PublicLayout.jsx';
 import Home from '../pages/public/Home.jsx';
+import Services from '../pages/public/Services.jsx';
+import ServiceDetail from '../pages/public/ServiceDetail.jsx';
 import DesignPreview from '../pages/public/DesignPreview.jsx';
 import LayoutPreview from '../pages/public/LayoutPreview.jsx';
 import NotFound from '../pages/public/NotFound.jsx';
@@ -12,6 +14,8 @@ export const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { path: '/', element: <Home /> },
+      { path: '/services', element: <Services /> },
+      { path: '/services/:slug', element: <ServiceDetail /> },
       { path: '*', element: <NotFound /> },
     ],
   },

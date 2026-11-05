@@ -2,7 +2,7 @@ import Section from '../layout/Section.jsx';
 import SectionHeading from '../layout/SectionHeading.jsx';
 import QueryState from '../ui/QueryState.jsx';
 import SkeletonGrid from '../ui/SkeletonGrid.jsx';
-import ServiceCard from './ServiceCard.jsx';
+import ServicesGrid from './ServicesGrid.jsx';
 import { useServices } from '../../features/services/useServices.js';
 
 export default function ServicesSection() {
@@ -23,15 +23,7 @@ export default function ServicesSection() {
           errorTitle="We could not load our services"
           emptyTitle="No services yet"
         >
-          {(services) => (
-            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {services.map((service) => (
-                <li key={service._id} className="flex">
-                  <ServiceCard service={service} />
-                </li>
-              ))}
-            </ul>
-          )}
+          {(services) => <ServicesGrid services={services} />}
         </QueryState>
       </div>
     </Section>
