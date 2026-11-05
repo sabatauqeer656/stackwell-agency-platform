@@ -17,6 +17,16 @@ const envSchema = z.object({
   MONGO_URI: z
     .string()
     .regex(/^mongodb(\+srv)?:\/\//, 'must start with mongodb:// or mongodb+srv://'),
+
+  // Secret used to sign access tokens. Anyone who knows it can forge logins, so it must be long.
+  JWT_ACCESS_SECRET: z.string().min(32, 'must be at least 32 characters'),
+  // Access tokens are short-lived on purpose (e.g. 15m, 1h). Refresh tokens come in the next step.
+  JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
+
+  // Only read by `npm run seed:admin` to create the first admin account
+  ADMIN_NAME: z.string().optional(),
+  ADMIN_EMAIL: z.string().optional(),
+  ADMIN_PASSWORD: z.string().optional(),
 });
 
 const result = envSchema.safeParse(process.env);

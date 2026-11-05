@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 export const USER_ROLES = ['admin', 'editor'];
 
@@ -56,6 +57,21 @@ const userSchema = new mongoose.Schema(
     },
   }
 );
+
+// bcrypt cost factor: each +1 doubles the time to hash, which slows down attackers too
+const SALT_ROUNDS = 12;
+
+// Runs before every save. Hash only when the password is new or changed,
+// otherwise saving e.g. a name change would hash the hash.
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+  this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+});
+
+// Compare a plain password with the stored hash. The hash must be loaded with .select('+password').
+userSchema.methods.comparePassword = function (plainPassword) {
+  return bcrypt.compare(plainPassword, this.password);
+};
 
 const User = mongoose.model('User', userSchema);
 

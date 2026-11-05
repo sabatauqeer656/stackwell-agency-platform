@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import { env } from './config/env.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
+import routes from './routes/index.js';
 
 const app = express();
 
@@ -39,6 +40,9 @@ app.get('/api/v1/health', (req, res) => {
     },
   });
 });
+
+// All feature routes live under /api/v1
+app.use('/api/v1', routes);
 
 // Must stay LAST: unmatched routes -> 404, then every error -> one JSON reply
 app.use(notFound);
