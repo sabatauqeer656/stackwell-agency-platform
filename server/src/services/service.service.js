@@ -2,9 +2,9 @@ import Service from '../models/Service.js';
 import AppError from '../utils/AppError.js';
 import { slugify, uniqueSlug } from '../utils/slugify.js';
 import { getPagination, buildMeta } from '../utils/pagination.js';
+import { escapeRegex } from '../utils/escapeRegex.js';
 
 const notFound = () => new AppError('Service not found', 404, 'NOT_FOUND');
-const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // ---------- Public: only published services ----------
 
