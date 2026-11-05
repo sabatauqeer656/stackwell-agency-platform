@@ -1,4 +1,8 @@
-// TEMPORARY: visual check of the design tokens. Removed before launch.
+// TEMPORARY: visual check of the design tokens and UI kit. Removed before launch.
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
+import Button from '../../components/ui/Button.jsx';
+
 const scale = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 
 // Full class names (not built dynamically) so Tailwind can detect them.
@@ -58,6 +62,32 @@ export default function DesignPreview() {
         </div>
         <p className="text-sm text-slate-500">Press Tab: links and buttons get a visible focus ring.</p>
         <a href="#" className="inline-block font-semibold text-brand-600">Focusable link</a>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Button</h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button>Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button loading>Sending</Button>
+          <Button disabled>Disabled</Button>
+          <Button as={Link} to="/">
+            Link to home <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Button>
+          <Button as={Link} to="/" variant="outline" disabled>
+            Disabled link
+          </Button>
+          <Button onClick={() => alert('clicked')}>Click me</Button>
+        </div>
       </section>
     </main>
   );
