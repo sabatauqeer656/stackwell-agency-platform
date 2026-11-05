@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import { ExternalLink, TrendingUp } from 'lucide-react';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.jsx';
 import Container from '../../components/layout/Container.jsx';
@@ -52,11 +52,9 @@ export default function ProjectDetail() {
 
         return (
           <>
-            <Helmet>
-              <title>{`${project.title} | ${companyName}`}</title>
-              <meta name="description" content={project.summary} />
+            <Seo title={project.title} description={project.summary} path={`/projects/${project.slug}`}>
               <script type="application/ld+json">{toJsonLd(jsonLd)}</script>
-            </Helmet>
+            </Seo>
 
             <div className="bg-brand-50">
               <Container className="pt-6">

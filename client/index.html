@@ -4,7 +4,28 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f766e" />
+
+    <!--
+      Defaults for crawlers and link-preview bots that do not run JavaScript.
+      Once the app loads, each page's own tags (see src/components/Seo.jsx) replace the
+      ones marked data-static-seo, so these never double up.
+    -->
     <title>Stackwell | Custom Software Development</title>
+    <meta
+      data-static-seo
+      name="description"
+      content="Stackwell designs and builds web apps, mobile apps and e-commerce stores. Fixed-price quotes, demos every two weeks, and you own the code."
+    />
+    <meta data-static-seo property="og:site_name" content="Stackwell" />
+    <meta data-static-seo property="og:type" content="website" />
+    <meta data-static-seo property="og:title" content="Stackwell | Custom Software Development" />
+    <meta
+      data-static-seo
+      property="og:description"
+      content="Stackwell designs and builds web apps, mobile apps and e-commerce stores. Fixed-price quotes, demos every two weeks, and you own the code."
+    />
+    <meta data-static-seo name="twitter:card" content="summary" />
   </head>
   <body>
     <div id="root"></div>

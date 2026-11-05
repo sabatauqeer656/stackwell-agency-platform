@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import PageHeader from '../../components/layout/PageHeader.jsx';
 import Section from '../../components/layout/Section.jsx';
 import CallToAction from '../../components/sections/CallToAction.jsx';
@@ -14,13 +14,11 @@ export default function Services() {
 
   return (
     <>
-      <Helmet>
-        <title>{`Services | ${companyName}`}</title>
-        <meta
-          name="description"
-          content={`Web applications, mobile apps, e-commerce, UI/UX design, APIs and ongoing support from ${companyName}.`}
-        />
-      </Helmet>
+      <Seo
+        title="Services"
+        description={`Web applications, mobile apps, e-commerce, UI/UX design, APIs and ongoing support from ${companyName}.`}
+        path="/services"
+      />
 
       <PageHeader
         eyebrow="What we do"

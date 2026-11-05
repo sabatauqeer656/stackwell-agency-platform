@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '../Seo.jsx';
 import { ArrowLeft, SearchX } from 'lucide-react';
 import Button from './Button.jsx';
 import Container from '../layout/Container.jsx';
@@ -10,11 +10,8 @@ import EmptyState from './EmptyState.jsx';
 export default function ResourceNotFound({ title, description, backTo, backLabel }) {
   return (
     <Container size="md" className="py-20">
-      <Helmet>
-        <title>{`${title} | Not found`}</title>
-        {/* Tells search engines not to list this URL */}
-        <meta name="robots" content="noindex" />
-      </Helmet>
+      {/* noindex: tells search engines not to list this address */}
+      <Seo title={title} noindex />
       <h1 className="sr-only">{title}</h1>
       <EmptyState
         icon={SearchX}

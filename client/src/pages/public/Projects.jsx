@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import { useSearchParams } from 'react-router-dom';
 import PageHeader from '../../components/layout/PageHeader.jsx';
 import Section from '../../components/layout/Section.jsx';
@@ -110,13 +110,12 @@ export default function Projects() {
 
   return (
     <>
-      <Helmet>
-        <title>{`${industryTitle ? `${industryTitle} projects` : 'Projects'} | ${companyName}`}</title>
-        <meta
-          name="description"
-          content={`Case studies from ${companyName}: real problems, practical solutions and measurable results.`}
-        />
-      </Helmet>
+      {/* The canonical address is always /projects: the filter and page are just views of the same list */}
+      <Seo
+        title={industryTitle ? `${industryTitle} projects` : 'Projects'}
+        description={`Case studies from ${companyName}: real problems, practical solutions and measurable results.`}
+        path="/projects"
+      />
 
       <PageHeader
         eyebrow="Our work"

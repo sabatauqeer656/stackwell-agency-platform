@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import { CircleCheck } from 'lucide-react';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.jsx';
 import Container from '../../components/layout/Container.jsx';
@@ -48,11 +48,9 @@ export default function ServiceDetail() {
 
         return (
           <>
-            <Helmet>
-              <title>{`${service.title} | ${companyName}`}</title>
-              <meta name="description" content={service.summary} />
+            <Seo title={service.title} description={service.summary} path={`/services/${service.slug}`}>
               <script type="application/ld+json">{toJsonLd(jsonLd)}</script>
-            </Helmet>
+            </Seo>
 
             {/* Same background colour as the top of the page header below, so the two blend together */}
             <div className="bg-brand-50">

@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import { CircleCheck } from 'lucide-react';
 import Breadcrumbs from '../../components/layout/Breadcrumbs.jsx';
 import Container from '../../components/layout/Container.jsx';
@@ -49,11 +49,9 @@ export default function SolutionDetail() {
 
         return (
           <>
-            <Helmet>
-              <title>{`${solution.title} | ${companyName}`}</title>
-              <meta name="description" content={solution.summary} />
+            <Seo title={solution.title} description={solution.summary} path={`/solutions/${solution.slug}`}>
               <script type="application/ld+json">{toJsonLd(jsonLd)}</script>
-            </Helmet>
+            </Seo>
 
             <div className="bg-brand-50">
               <Container className="pt-6">

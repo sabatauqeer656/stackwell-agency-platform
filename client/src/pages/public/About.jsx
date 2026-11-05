@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import { Accessibility, Eye, Handshake, Hammer } from 'lucide-react';
 import PageHeader from '../../components/layout/PageHeader.jsx';
 import Section from '../../components/layout/Section.jsx';
@@ -55,14 +55,13 @@ export default function About() {
 
   return (
     <>
-      <Helmet>
-        <title>{`About | ${companyName}`}</title>
-        <meta
-          name="description"
-          content={`Meet the small, senior team at ${companyName}: how we work, what we value and who will build your product.`}
-        />
+      <Seo
+        title="About"
+        description={`Meet the small, senior team at ${companyName}: how we work, what we value and who will build your product.`}
+        path="/about"
+      >
         <script type="application/ld+json">{toJsonLd(jsonLd)}</script>
-      </Helmet>
+      </Seo>
 
       <PageHeader
         eyebrow="About us"

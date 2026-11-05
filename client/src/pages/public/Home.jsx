@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import Hero from '../../components/sections/Hero.jsx';
 import ServicesSection from '../../components/sections/ServicesSection.jsx';
 import FeaturedProjectsSection from '../../components/sections/FeaturedProjectsSection.jsx';
@@ -12,14 +12,11 @@ export default function Home() {
 
   return (
     <>
-      <Helmet>
-        {/* Helmet needs ONE string inside <title>, so build it with a template literal */}
-        <title>{`${companyName} | Custom Software Development`}</title>
-        <meta
-          name="description"
-          content={`${companyName} designs and builds web apps, mobile apps and e-commerce stores. Fixed-price quotes, demos every two weeks, and you own the code.`}
-        />
-      </Helmet>
+      <Seo
+        absoluteTitle={`${companyName} | Custom Software Development`}
+        description={`${companyName} designs and builds web apps, mobile apps and e-commerce stores. Fixed-price quotes, demos every two weeks, and you own the code.`}
+        path="/"
+      />
       <Hero />
       <ServicesSection />
       <FeaturedProjectsSection />

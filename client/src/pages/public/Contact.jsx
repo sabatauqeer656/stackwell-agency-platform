@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '../../components/Seo.jsx';
 import PageHeader from '../../components/layout/PageHeader.jsx';
 import Section from '../../components/layout/Section.jsx';
 import ContactDetails from '../../components/sections/ContactDetails.jsx';
@@ -35,14 +35,13 @@ export default function Contact() {
 
   return (
     <>
-      <Helmet>
-        <title>{`Contact | ${companyName}`}</title>
-        <meta
-          name="description"
-          content={`Get in touch with ${companyName}. Tell us about your project and we will reply within one business day.`}
-        />
+      <Seo
+        title="Contact"
+        description={`Get in touch with ${companyName}. Tell us about your project and we will reply within one business day.`}
+        path="/contact"
+      >
         <script type="application/ld+json">{toJsonLd(jsonLd)}</script>
-      </Helmet>
+      </Seo>
 
       <PageHeader
         eyebrow="Contact"
