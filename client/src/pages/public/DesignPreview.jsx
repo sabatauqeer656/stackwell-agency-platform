@@ -1,6 +1,10 @@
 // TEMPORARY: visual check of the design tokens and UI kit. Removed before launch.
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Inbox } from 'lucide-react';
+import EmptyState from '../../components/ui/EmptyState.jsx';
+import Pagination from '../../components/ui/Pagination.jsx';
+import Tabs from '../../components/ui/Tabs.jsx';
 import Button from '../../components/ui/Button.jsx';
 import Input from '../../components/ui/Input.jsx';
 import Textarea from '../../components/ui/Textarea.jsx';
@@ -39,6 +43,8 @@ function Swatches({ title, classes }) {
 }
 
 export default function DesignPreview() {
+  const [page, setPage] = useState(5);
+
   return (
     <main className="mx-auto max-w-5xl space-y-12 px-4 py-12">
       <h1 className="text-h1">Design tokens</h1>
@@ -47,7 +53,7 @@ export default function DesignPreview() {
         <h2 className="text-h2">Colors</h2>
         <Swatches title="brand (indigo)" classes={brandBg} />
         <Swatches title="accent (violet)" classes={accentBg} />
-        <div className="h-16 rounded-card bg-gradient-to-r from-brand-600 to-accent-500" />
+        <div className="h-16 rounded-card bg-linear-to-r from-brand-600 to-accent-500" />
       </section>
 
       <section className="space-y-4">
@@ -162,6 +168,35 @@ export default function DesignPreview() {
           <Skeleton className="h-4 w-full" />
           <Skeleton className="h-4 w-5/6" />
         </Card>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Empty state</h2>
+        <EmptyState
+          icon={Inbox}
+          title="No projects found"
+          description="Try a different industry filter, or clear the filters to see everything."
+          action={<Button variant="outline">Clear filters</Button>}
+        />
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Pagination</h2>
+        <p className="text-slate-600">Current page: {page} of 20</p>
+        <Pagination page={page} totalPages={20} onPageChange={setPage} />
+        <Pagination page={1} totalPages={3} onPageChange={() => {}} />
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Tabs</h2>
+        <p className="text-sm text-slate-500">Click a tab, then use the arrow keys, Home and End.</p>
+        <Tabs
+          tabs={[
+            { id: 'features', label: 'Features', content: <p>Feature list goes here.</p> },
+            { id: 'screens', label: 'Screenshots', content: <p>Screenshots go here.</p> },
+            { id: 'pricing', label: 'Pricing', content: <p>Pricing details go here.</p> },
+          ]}
+        />
       </section>
     </main>
   );
