@@ -13,6 +13,8 @@ import Card from '../../components/ui/Card.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Spinner from '../../components/ui/Spinner.jsx';
 import Skeleton from '../../components/ui/Skeleton.jsx';
+import Modal from '../../components/ui/Modal.jsx';
+import { useToast } from '../../hooks/useToast.js';
 
 const scale = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 
@@ -44,6 +46,8 @@ function Swatches({ title, classes }) {
 
 export default function DesignPreview() {
   const [page, setPage] = useState(5);
+  const [modalOpen, setModalOpen] = useState(false);
+  const toast = useToast();
 
   return (
     <main className="mx-auto max-w-5xl space-y-12 px-4 py-12">
@@ -197,6 +201,47 @@ export default function DesignPreview() {
             { id: 'pricing', label: 'Pricing', content: <p>Pricing details go here.</p> },
           ]}
         />
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Modal</h2>
+        <Button onClick={() => setModalOpen(true)}>Open modal</Button>
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Request a demo">
+          <p className="text-slate-600">
+            Press Tab repeatedly: focus stays inside this dialog. Press Escape or click outside to close.
+          </p>
+          <div className="mt-4">
+            <Input label="Your email" type="email" placeholder="jane@company.com" />
+          </div>
+          <div className="mt-6 flex justify-end gap-3">
+            <Button variant="ghost" onClick={() => setModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setModalOpen(false);
+                toast.success('Demo request sent!');
+              }}
+            >
+              Send request
+            </Button>
+          </div>
+        </Modal>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Toast</h2>
+        <div className="flex flex-wrap gap-3">
+          <Button variant="outline" onClick={() => toast.success('Your message was sent.')}>
+            Success toast
+          </Button>
+          <Button variant="outline" onClick={() => toast.error('Something went wrong. Please try again.')}>
+            Error toast
+          </Button>
+          <Button variant="outline" onClick={() => toast.info('We reply within 24 hours.')}>
+            Info toast
+          </Button>
+        </div>
       </section>
     </main>
   );
