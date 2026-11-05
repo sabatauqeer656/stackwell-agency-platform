@@ -2,6 +2,9 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Button from '../../components/ui/Button.jsx';
+import Input from '../../components/ui/Input.jsx';
+import Textarea from '../../components/ui/Textarea.jsx';
+import Select from '../../components/ui/Select.jsx';
 
 const scale = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 
@@ -88,6 +91,28 @@ export default function DesignPreview() {
           </Button>
           <Button onClick={() => alert('clicked')}>Click me</Button>
         </div>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Form fields</h2>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <Input label="Full name" placeholder="Jane Doe" required />
+          <Input label="Email" type="email" placeholder="jane@company.com" hint="We reply within 24 hours." />
+          <Input label="Phone" error="Please enter a valid phone number." defaultValue="12ab" />
+          <Input label="Company" disabled defaultValue="Disabled field" />
+          <Select label="Project type" required>
+            <option value="">Select a type</option>
+            <option value="web">Web application</option>
+            <option value="mobile">Mobile app</option>
+            <option value="ecommerce">E-commerce</option>
+          </Select>
+          <Select label="Budget" error="Please choose a budget range.">
+            <option value="">Select a range</option>
+            <option value="small">Under $10k</option>
+          </Select>
+        </div>
+        <Textarea label="Project description" hint="Tell us about your goals." placeholder="What are you building?" />
+        <Textarea label="Message" error="Message must be at least 10 characters." defaultValue="Hi" rows={3} />
       </section>
     </main>
   );
