@@ -6,6 +6,7 @@ import ServiceDetail from '../pages/public/ServiceDetail.jsx';
 import Projects from '../pages/public/Projects.jsx';
 import ProjectDetail from '../pages/public/ProjectDetail.jsx';
 import Solutions from '../pages/public/Solutions.jsx';
+import About from '../pages/public/About.jsx';
 import SolutionDetail from '../pages/public/SolutionDetail.jsx';
 import DesignPreview from '../pages/public/DesignPreview.jsx';
 import LayoutPreview from '../pages/public/LayoutPreview.jsx';
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       { path: '/projects/:slug', element: <ProjectDetail /> },
       { path: '/solutions', element: <Solutions /> },
       { path: '/solutions/:slug', element: <SolutionDetail /> },
+      { path: '/about', element: <About /> },
       { path: '*', element: <NotFound /> },
     ],
   },
