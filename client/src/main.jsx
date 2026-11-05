@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
+import '@fontsource-variable/inter'
 import './index.css'
 import Providers from './app/providers.jsx'
 import { router } from './app/router.jsx'

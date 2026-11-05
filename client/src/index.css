@@ -2,11 +2,15 @@
 
 /*
   Design tokens for Nexora Labs.
-  Each --color-brand-* line creates Tailwind classes automatically:
-  bg-brand-600, text-brand-500, border-brand-200, etc.
+  Each token creates Tailwind utilities automatically:
+    --color-brand-600  -> bg-brand-600, text-brand-600, border-brand-600 ...
+    --text-h1          -> text-h1
+    --shadow-card      -> shadow-card
+    --radius-card      -> rounded-card
   To rebrand the whole site, change only these values.
 */
 @theme {
+  /* Primary: indigo */
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
   --color-brand-200: #c7d2fe;
@@ -18,11 +22,74 @@
   --color-brand-800: #3730a3;
   --color-brand-900: #312e81;
 
+  /* Secondary accent: violet (gradients, highlights) */
+  --color-accent-50: #f5f3ff;
+  --color-accent-100: #ede9fe;
+  --color-accent-200: #ddd6fe;
+  --color-accent-300: #c4b5fd;
+  --color-accent-400: #a78bfa;
+  --color-accent-500: #8b5cf6;
+  --color-accent-600: #7c3aed;
+  --color-accent-700: #6d28d9;
+  --color-accent-800: #5b21b6;
+  --color-accent-900: #4c1d95;
+
+  /* Main text / dark surfaces */
   --color-ink: #0f172a;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Font: self-hosted Inter (imported in main.jsx) */
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale: size + matching line height + letter spacing */
+  --text-display: 3.75rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-h1: 3rem;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h2: 2.25rem;
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: 1.5rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+
+  /* Shape and depth */
+  --radius-card: 1rem;
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 4px 16px rgb(15 23 42 / 0.06);
+  --shadow-card-hover: 0 4px 8px rgb(15 23 42 / 0.06), 0 16px 40px rgb(79 70 229 / 0.16);
 }
 
-body {
-  @apply bg-white text-ink font-sans antialiased;
+/* Base styles: apply to plain HTML elements before any component styling */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-white text-ink font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-bold tracking-tight text-ink;
+  }
+
+  /* Visible focus ring for keyboard users (accessibility) */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-200);
+  }
 }
