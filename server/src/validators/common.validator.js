@@ -5,6 +5,9 @@ import { paginationQuery } from '../utils/pagination.js';
 // from ever reaching the database.
 export const objectId = z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id');
 
+// Only http(s) links are accepted, so a stored URL can never be javascript: or data:
+export const httpUrl = z.url({ protocol: /^https?$/, message: 'Must be a valid http(s) URL' }).max(500);
+
 export const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export const idParamSchema = z.object({

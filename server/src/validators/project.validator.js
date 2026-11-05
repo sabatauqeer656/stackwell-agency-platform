@@ -1,8 +1,7 @@
 import { z } from 'zod';
 import { paginationQuery } from '../utils/pagination.js';
-import { objectId, slugPattern } from './common.validator.js';
+import { objectId, slugPattern, httpUrl } from './common.validator.js';
 
-const httpUrl = z.url({ protocol: /^https?$/, message: 'Must be a valid http(s) URL' }).max(500);
 const stringList = (max, itemMax) => z.array(z.string().trim().min(1).max(itemMax)).max(max);
 
 // No .default() on purpose: the Mongoose model supplies defaults.
