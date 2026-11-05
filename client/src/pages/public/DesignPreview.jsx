@@ -5,6 +5,10 @@ import Button from '../../components/ui/Button.jsx';
 import Input from '../../components/ui/Input.jsx';
 import Textarea from '../../components/ui/Textarea.jsx';
 import Select from '../../components/ui/Select.jsx';
+import Card from '../../components/ui/Card.jsx';
+import Badge from '../../components/ui/Badge.jsx';
+import Spinner from '../../components/ui/Spinner.jsx';
+import Skeleton from '../../components/ui/Skeleton.jsx';
 
 const scale = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 
@@ -113,6 +117,51 @@ export default function DesignPreview() {
         </div>
         <Textarea label="Project description" hint="Tell us about your goals." placeholder="What are you building?" />
         <Textarea label="Message" error="Message must be at least 10 characters." defaultValue="Hi" rows={3} />
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Badge</h2>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge>Neutral</Badge>
+          <Badge variant="brand">Brand</Badge>
+          <Badge variant="success">Won</Badge>
+          <Badge variant="warning">Reviewing</Badge>
+          <Badge variant="danger">Lost</Badge>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Card</h2>
+        <div className="grid gap-6 sm:grid-cols-3">
+          <Card>
+            <h3 className="text-h3">Static card</h3>
+            <p className="mt-2 text-slate-600">No hover effect.</p>
+          </Card>
+          <Card hover>
+            <Badge variant="brand">Fintech</Badge>
+            <h3 className="mt-3 text-h3">Hover card</h3>
+            <p className="mt-2 text-slate-600">Lifts slightly on hover.</p>
+          </Card>
+          <Card as={Link} to="/" hover>
+            <h3 className="text-h3">Link card</h3>
+            <p className="mt-2 text-slate-600">The whole card is a link.</p>
+          </Card>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-h2">Loading states</h2>
+        <div className="flex items-center gap-4">
+          <Spinner size="sm" />
+          <Spinner />
+          <Spinner size="lg" />
+        </div>
+        <Card className="space-y-3" aria-busy="true">
+          <Skeleton className="h-40 w-full" />
+          <Skeleton className="h-6 w-2/3" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-5/6" />
+        </Card>
       </section>
     </main>
   );
