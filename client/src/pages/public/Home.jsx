@@ -1,17 +1,25 @@
 import { Helmet } from 'react-helmet-async';
+import Hero from '../../components/sections/Hero.jsx';
+import ServicesSection from '../../components/sections/ServicesSection.jsx';
 import { useSettings } from '../../features/settings/useSettings.js';
 
-// Temporary page: replaced by the real home page in the next steps of Phase 3.
+// The home page is just a list of sections. Featured projects, testimonials and the closing
+// call to action are added in the next step.
 export default function Home() {
-  const { companyName, tagline } = useSettings();
+  const { companyName } = useSettings();
 
   return (
-    <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 bg-brand-50 px-4 py-20 text-center">
+    <>
       <Helmet>
-        <title>{companyName} | Custom Software Development</title>
+        {/* Helmet needs ONE string inside <title>, so build it with a template literal */}
+        <title>{`${companyName} | Custom Software Development`}</title>
+        <meta
+          name="description"
+          content={`${companyName} designs and builds web apps, mobile apps and e-commerce stores. Fixed-price quotes, demos every two weeks, and you own the code.`}
+        />
       </Helmet>
-      <h1 className="text-4xl font-bold tracking-tight text-brand-900 sm:text-6xl">{companyName}</h1>
-      <p className="max-w-xl text-lg text-slate-600">{tagline}</p>
-    </div>
+      <Hero />
+      <ServicesSection />
+    </>
   );
 }

@@ -9,6 +9,7 @@ export default function SectionHeading({
   description,
   align = 'center',
   onDark = false,
+  id, // lets a parent <section aria-labelledby="..."> point at this heading
   className,
 }) {
   return (
@@ -23,7 +24,7 @@ export default function SectionHeading({
           {eyebrow}
         </p>
       )}
-      <Heading className={cn('text-3xl sm:text-h2', onDark && 'text-white')}>{title}</Heading>
+      <Heading id={id} className={cn('text-3xl sm:text-h2', onDark && 'text-white')}>{title}</Heading>
       {description && (
         <p className={cn('mt-4 text-lg', onDark ? 'text-slate-300' : 'text-slate-600')}>{description}</p>
       )}
