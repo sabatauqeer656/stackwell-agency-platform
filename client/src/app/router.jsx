@@ -3,6 +3,8 @@ import PublicLayout from '../components/layout/PublicLayout.jsx';
 import Home from '../pages/public/Home.jsx';
 import Services from '../pages/public/Services.jsx';
 import ServiceDetail from '../pages/public/ServiceDetail.jsx';
+import Projects from '../pages/public/Projects.jsx';
+import ProjectDetail from '../pages/public/ProjectDetail.jsx';
 import DesignPreview from '../pages/public/DesignPreview.jsx';
 import LayoutPreview from '../pages/public/LayoutPreview.jsx';
 import NotFound from '../pages/public/NotFound.jsx';
@@ -16,6 +18,8 @@ export const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/services', element: <Services /> },
       { path: '/services/:slug', element: <ServiceDetail /> },
+      { path: '/projects', element: <Projects /> },
+      { path: '/projects/:slug', element: <ProjectDetail /> },
       { path: '*', element: <NotFound /> },
     ],
   },

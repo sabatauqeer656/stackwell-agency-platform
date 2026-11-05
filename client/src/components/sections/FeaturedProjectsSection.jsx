@@ -4,7 +4,7 @@ import SectionHeading from '../layout/SectionHeading.jsx';
 import Button from '../ui/Button.jsx';
 import QueryState from '../ui/QueryState.jsx';
 import SkeletonGrid from '../ui/SkeletonGrid.jsx';
-import ProjectCard from './ProjectCard.jsx';
+import ProjectsGrid from './ProjectsGrid.jsx';
 import { useFeaturedProjects } from '../../features/projects/useFeaturedProjects.js';
 
 export default function FeaturedProjectsSection() {
@@ -25,15 +25,7 @@ export default function FeaturedProjectsSection() {
           errorTitle="We could not load our projects"
           emptyTitle="No featured projects yet"
         >
-          {(projects) => (
-            <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
-                <li key={project._id} className="flex">
-                  <ProjectCard project={project} />
-                </li>
-              ))}
-            </ul>
-          )}
+          {(projects) => <ProjectsGrid projects={projects} />}
         </QueryState>
       </div>
       <div className="mt-10 text-center">

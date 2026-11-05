@@ -1,8 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../../lib/axios.js';
-
-// True when the API says "no such service" (404) or "that is not even a valid slug" (400).
-export const isMissing = (error) => [400, 404].includes(error?.response?.status);
+import { retryUnlessMissing } from '../../lib/apiErrors.js';
 
 const fetchService = async (slug) => {
   const response = await api.get(`/services/${encodeURIComponent(slug)}`);
@@ -14,8 +12,6 @@ export function useService(slug) {
   return useQuery({
     queryKey: ['services', slug],
     queryFn: () => fetchService(slug),
-    // 4xx answers (404 "does not exist", 400 "malformed slug") will not change if we ask again.
-    // Only unexpected failures (network, 5xx) are worth one retry.
-    retry: (failureCount, error) => !isMissing(error) && failureCount < 1,
+    retry: retryUnlessMissing,
   });
 }
