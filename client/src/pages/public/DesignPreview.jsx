@@ -55,8 +55,8 @@ export default function DesignPreview() {
 
       <section className="space-y-6">
         <h2 className="text-h2">Colors</h2>
-        <Swatches title="brand (indigo)" classes={brandBg} />
-        <Swatches title="accent (violet)" classes={accentBg} />
+        <Swatches title="brand (teal)" classes={brandBg} />
+        <Swatches title="accent (cyan)" classes={accentBg} />
         <div className="h-16 rounded-card bg-linear-to-r from-brand-600 to-accent-500" />
       </section>
 

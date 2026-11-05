@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  Design tokens for Nexora Labs.
+  Design tokens for Stackwell.
   Each token creates Tailwind utilities automatically:
     --color-brand-600  -> bg-brand-600, text-brand-600, border-brand-600 ...
     --text-h1          -> text-h1
@@ -10,29 +10,29 @@
   To rebrand the whole site, change only these values.
 */
 @theme {
-  /* Primary: indigo */
-  --color-brand-50: #eef2ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-200: #c7d2fe;
-  --color-brand-300: #a5b4fc;
-  --color-brand-400: #818cf8;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #3730a3;
-  --color-brand-900: #312e81;
+  /* Primary: teal */
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-200: #99f6e4;
+  --color-brand-300: #5eead4;
+  --color-brand-400: #2dd4bf;
+  --color-brand-500: #0d9488;
+  --color-brand-600: #0f766e;
+  --color-brand-700: #115e59;
+  --color-brand-800: #134e4a;
+  --color-brand-900: #042f2e;
 
-  /* Secondary accent: violet (gradients, highlights) */
-  --color-accent-50: #f5f3ff;
-  --color-accent-100: #ede9fe;
-  --color-accent-200: #ddd6fe;
-  --color-accent-300: #c4b5fd;
-  --color-accent-400: #a78bfa;
-  --color-accent-500: #8b5cf6;
-  --color-accent-600: #7c3aed;
-  --color-accent-700: #6d28d9;
-  --color-accent-800: #5b21b6;
-  --color-accent-900: #4c1d95;
+  /* Secondary accent: cyan (gradients, highlights) */
+  --color-accent-50: #ecfeff;
+  --color-accent-100: #cffafe;
+  --color-accent-200: #a5f3fc;
+  --color-accent-300: #67e8f9;
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+  --color-accent-700: #0e7490;
+  --color-accent-800: #155e75;
+  --color-accent-900: #164e63;
 
   /* Main text / dark surfaces */
   --color-ink: #0f172a;
@@ -57,7 +57,7 @@
   /* Shape and depth */
   --radius-card: 1rem;
   --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 4px 16px rgb(15 23 42 / 0.06);
-  --shadow-card-hover: 0 4px 8px rgb(15 23 42 / 0.06), 0 16px 40px rgb(79 70 229 / 0.16);
+  --shadow-card-hover: 0 4px 8px rgb(15 23 42 / 0.06), 0 16px 40px rgb(15 118 110 / 0.18);
 }
 
 /* Base styles: apply to plain HTML elements before any component styling */

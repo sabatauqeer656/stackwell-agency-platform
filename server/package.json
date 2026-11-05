@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=20.12"
   },
-  "description": "Nexora Labs API (Express + MongoDB)",
+  "description": "Stackwell API (Express + MongoDB)",
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js"

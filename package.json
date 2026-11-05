@@ -1,8 +1,8 @@
 {
-  "name": "nexora-labs-website",
+  "name": "stackwell-agency-platform",
   "version": "1.0.0",
   "private": true,
-  "description": "Nexora Labs - software agency website (MERN)",
+  "description": "Stackwell - software agency platform (MERN)",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },

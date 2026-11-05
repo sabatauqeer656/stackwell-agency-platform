@@ -1,4 +1,4 @@
-# Nexora Labs Website
+# Stackwell Agency Platform
 
 A full-stack MERN website for a software agency: a marketing site that turns visitors into leads, and an admin dashboard for managing those leads and the site's content.
 
