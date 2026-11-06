@@ -1,5 +1,0 @@
-# Search engines may crawl the whole public site, but not the admin dashboard (added in Phase 5).
-# The Sitemap line is added when the site is deployed and has a real address.
-User-agent: *
-Allow: /
-Disallow: /admin

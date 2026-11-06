@@ -6,7 +6,7 @@ A full-stack MERN website for a (fictional) software agency: a marketing site th
 
 **Live demo:** https://stackwell-agency-platform.onrender.com (hosted on Render's free plan, so the first visit after a quiet period can take about 30 seconds while the server wakes up). The admin dashboard is at `/admin`; its login is private.
 
-> **Status:** the REST API, the public site and the admin dashboard are finished (Phases 1 to 5). What is left is polish: an accessibility audit, committed automated tests and a sitemap. See the [Roadmap](#roadmap).
+> **Status:** the REST API, the public site and the admin dashboard are finished (Phases 1 to 5). What is left is polish: screenshots and removing the temporary preview pages. See the [Roadmap](#roadmap).
 > The agency, clients, team and figures are invented for this portfolio project.
 
 ## Highlights
@@ -16,7 +16,7 @@ A full-stack MERN website for a (fictional) software agency: a marketing site th
 - **Careful file handling:** uploads are verified by their actual content (not the file name), size-limited, stored privately (quote attachments, opened only through expiring signed links) or publicly (website images), and cleaned up when no longer used.
 - **A complete admin dashboard:** lead pipeline, six content editors, image uploads and site settings. The editors share one configurable data layer and one form hook, so adding a content type is mostly configuration.
 - **Built to be reliable:** every list and form handles loading, error and empty states; unsaved changes are guarded; edits show on the public site without a reload; and everything works at phone width.
-- **Tested and checked on every push:** 142 automated tests (API and client) plus lint and a production build run in GitHub Actions, and each feature was also verified end to end in Chrome against the real services, including failure cases such as fake file types, oversized files and blocked roles.
+- **Tested and checked on every push:** 144 automated tests (API and client) plus lint and a production build run in GitHub Actions, and each feature was also verified end to end in Chrome against the real services, including failure cases such as fake file types, oversized files and blocked roles.
 - **Accessible and discoverable:** keyboard and screen-reader support, per-page SEO, structured data and `robots.txt`.
 
 ## What it does
@@ -206,7 +206,7 @@ Pushing to `main` redeploys automatically.
 
 `npm test` runs two suites, and **GitHub Actions runs them (plus lint and a production build) on every push** (see `.github/workflows/ci.yml`).
 
-**API tests** (`server/test`, Node's built-in test runner, 74 tests). They start the real Express app against a throwaway MongoDB, so they never touch your own database, Cloudinary account or mail server:
+**API tests** (`server/test`, Node's built-in test runner, 76 tests). They start the real Express app against a throwaway MongoDB, so they never touch your own database, Cloudinary account or mail server:
 - **Authentication:** login (the same answer for a wrong password and an unknown email), httpOnly refresh cookie, session renewal, logout revoking every token, deactivated users, and login rate limiting.
 - **Authorization:** every admin route refuses visitors who are not signed in; editors cannot delete or change settings; drafts never leak to the public API.
 - **Content:** services, solutions, projects, team, testimonials, FAQs and settings (validation, unique web addresses, draft visibility, pagination, blocked deletes, "send null to remove a field").
@@ -232,4 +232,4 @@ While the UI is built, two pages show the design system and components: `/design
 - [x] **Phase 5: Admin dashboard.** Login, lead pipeline, content management, image uploads, settings.
 - [x] **Deployed** to Render (single web service).
 - [x] **Accessibility audit** (axe-core and keyboard checks) and **automated tests with CI.**
-- [ ] **Phase 6: Polish.** Sitemap, screenshots, removing the preview pages.
+- [ ] **Phase 6: Polish.** Screenshots and removing the preview pages. (The live `sitemap.xml` and `robots.txt` are done.)

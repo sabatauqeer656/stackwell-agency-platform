@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import { env } from './config/env.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 import routes from './routes/index.js';
+import seoRoutes from './routes/seo.routes.js';
 
 const app = express();
 
@@ -60,6 +61,9 @@ app.get('/api/v1/health', (req, res) => {
 
 // All feature routes live under /api/v1
 app.use('/api/v1', routes);
+
+// /sitemap.xml and /robots.txt for search engines (before the static files so these live versions win)
+app.use(seoRoutes);
 
 // In production this one server also serves the built React site (client/dist), so the website and the API
 // share one address: no cross-site cookies, no CORS trouble, one deploy.
