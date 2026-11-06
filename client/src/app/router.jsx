@@ -73,7 +73,7 @@ export const router = createBrowserRouter([
               // Administrators only: the screen shows "no access" to editors (and the API refuses them anyway)
               {
                 ...page(() => import('../components/admin/RequireAdmin.jsx')),
-                children: [{ path: 'settings', handle: { title: 'Settings' }, ...page(() => import('../pages/admin/ComingSoon.jsx')) }],
+                children: [{ path: 'settings', ...page(() => import('../pages/admin/Settings.jsx')) }],
               },
               { path: '*', ...page(() => import('../pages/admin/AdminNotFound.jsx')) },
             ],
