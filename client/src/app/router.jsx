@@ -82,7 +82,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // Temporary standalone pages, removed before launch
-  { path: '/design-preview', HydrateFallback: InitialLoading, ...page(() => import('../pages/public/DesignPreview.jsx')) },
-  { path: '/layout-preview', HydrateFallback: InitialLoading, ...page(() => import('../pages/public/LayoutPreview.jsx')) },
 ]);

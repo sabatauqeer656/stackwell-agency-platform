@@ -6,7 +6,7 @@ A full-stack MERN website for a (fictional) software agency: a marketing site th
 
 **Live demo:** https://stackwell-agency-platform.onrender.com (hosted on Render's free plan, so the first visit after a quiet period can take about 30 seconds while the server wakes up). The admin dashboard is at `/admin`; its login is private.
 
-> **Status:** the REST API, the public site and the admin dashboard are finished (Phases 1 to 5). What is left is polish: screenshots and removing the temporary preview pages. See the [Roadmap](#roadmap).
+> **Status:** the REST API, the public site and the admin dashboard are finished (Phases 1 to 5). Phase 6 (polish) is complete. See the [Roadmap](#roadmap).
 > The agency, clients, team and figures are invented for this portfolio project.
 
 ## Highlights
@@ -18,6 +18,18 @@ A full-stack MERN website for a (fictional) software agency: a marketing site th
 - **Built to be reliable:** every list and form handles loading, error and empty states; unsaved changes are guarded; edits show on the public site without a reload; and everything works at phone width.
 - **Tested and checked on every push:** 144 automated tests (API and client) plus lint and a production build run in GitHub Actions, and each feature was also verified end to end in Chrome against the real services, including failure cases such as fake file types, oversized files and blocked roles.
 - **Accessible and discoverable:** keyboard and screen-reader support, per-page SEO, structured data and `robots.txt`.
+
+## Screenshots
+
+| Home | Projects |
+| --- | --- |
+| ![Home page](docs/screenshots/home.png) | ![Projects page](docs/screenshots/projects.png) |
+
+| Quote wizard | Admin dashboard (projects) |
+| --- | --- |
+| ![Quote wizard](docs/screenshots/quote.png) | ![Admin projects list](docs/screenshots/admin-projects.png) |
+
+The site is fully responsive, for example on a phone: [home page](docs/screenshots/home-mobile.png).
 
 ## What it does
 
@@ -219,10 +231,6 @@ The first run downloads a MongoDB binary (about 700 MB, then cached). Set `MONGO
 
 **Also checked by hand** during development with real-browser (Chrome) runs against the real services: uploads to Cloudinary, cache refreshes after edits, unsaved-changes guards, phone-width layouts, and an `axe-core` accessibility scan of every public page, admin screen and interactive state.
 
-## Temporary preview pages
-
-While the UI is built, two pages show the design system and components: `/design-preview` and `/layout-preview`. They will be removed before launch.
-
 ## Roadmap
 
 - [x] **Phase 1: Foundation.** Monorepo, Express skeleton, env validation, MongoDB connection, error handling, security middleware, design system and UI kit.
@@ -232,4 +240,4 @@ While the UI is built, two pages show the design system and components: `/design
 - [x] **Phase 5: Admin dashboard.** Login, lead pipeline, content management, image uploads, settings.
 - [x] **Deployed** to Render (single web service).
 - [x] **Accessibility audit** (axe-core and keyboard checks) and **automated tests with CI.**
-- [ ] **Phase 6: Polish.** Screenshots and removing the preview pages. (The live `sitemap.xml` and `robots.txt` are done.)
+- [x] **Phase 6: Polish.** Accessibility audit, automated tests with CI, live sitemap and robots, screenshots, clean-up of the temporary pages.
