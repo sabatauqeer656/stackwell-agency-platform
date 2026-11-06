@@ -6,14 +6,15 @@ import DynamicIcon from '../ui/DynamicIcon.jsx';
 // One industry as a card. The whole card links to the industry page.
 // (Similar to ServiceCard on purpose: the two differ in link target and label, and keeping
 // them separate means a change to one can never accidentally change the other.)
-export default function SolutionCard({ solution }) {
+// `headingLevel`: 'h3' under a section heading, 'h2' straight after the page's h1 (see ServiceCard)
+export default function SolutionCard({ solution, headingLevel: Heading = 'h3' }) {
   return (
     <Card as={Link} to={`/solutions/${solution.slug}`} hover className="group w-full">
       <div className="flex h-full flex-col">
         <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-50 text-accent-700">
           <DynamicIcon name={solution.icon} className="h-6 w-6" />
         </span>
-        <h3 className="mt-5 text-h3">{solution.title}</h3>
+        <Heading className="mt-5 text-h3">{solution.title}</Heading>
         <p className="mt-2 flex-1 text-slate-600">{solution.summary}</p>
         <span className="mt-5 inline-flex items-center gap-1 font-semibold text-brand-600">
           Explore {solution.title}

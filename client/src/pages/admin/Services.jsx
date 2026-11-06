@@ -21,7 +21,7 @@ export default function Services() {
           <span className="min-w-0">
             <span className="block truncate font-semibold text-ink">{service.title}</span>
             <span className="block truncate text-sm text-slate-500">{service.summary}</span>
-            <span className="block truncate text-xs text-slate-400">/services/{service.slug}</span>
+            <span className="block truncate text-xs text-slate-500">/services/{service.slug}</span>
           </span>
         </>
       )}

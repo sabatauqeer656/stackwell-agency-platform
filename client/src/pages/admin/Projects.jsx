@@ -21,7 +21,7 @@ export default function Projects() {
             {project.clientName}
             {project.solution?.title ? ` · ${project.solution.title}` : ''}
           </span>
-          <span className="block truncate text-xs text-slate-400">/projects/{project.slug}</span>
+          <span className="block truncate text-xs text-slate-500">/projects/{project.slug}</span>
         </span>
       )}
     />

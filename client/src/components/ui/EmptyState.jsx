@@ -14,7 +14,8 @@ export default function EmptyState({ icon: Icon, title, description, action, cla
           <Icon className="h-6 w-6" aria-hidden="true" />
         </span>
       )}
-      <h3 className="text-lg font-semibold text-ink">{title}</h3>
+      {/* An h2: it follows the page's h1 (or another h2) in every place this is used, so heading levels never skip a step */}
+      <h2 className="text-lg font-semibold text-ink">{title}</h2>
       {description && <p className="mt-1 max-w-sm text-slate-600">{description}</p>}
       {action && <div className="mt-6">{action}</div>}
     </div>

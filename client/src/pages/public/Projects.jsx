@@ -99,7 +99,7 @@ export default function Projects() {
       <>
         {/* While the next page loads, the previous results stay visible but dimmed */}
         <div aria-busy={query.isPlaceholderData} className={cn('transition-opacity', query.isPlaceholderData && 'opacity-60')}>
-          <ProjectsGrid projects={items} />
+          <ProjectsGrid projects={items} headingLevel="h2" />
         </div>
         <div className="mt-10">
           <Pagination page={meta.page} totalPages={meta.totalPages} onPageChange={changePage} />

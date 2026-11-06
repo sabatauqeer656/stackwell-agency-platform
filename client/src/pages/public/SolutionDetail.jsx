@@ -85,7 +85,8 @@ export default function SolutionDetail() {
                   )}
                 </div>
 
-                <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+                {/* A plain div, not <aside>: this column already sits inside a labelled region, and a sidebar landmark must not be nested in another landmark */}
+                <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
                   <Card>
                     <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-50 text-accent-700">
                       <DynamicIcon name={solution.icon} className="h-6 w-6" />
@@ -118,7 +119,7 @@ export default function SolutionDetail() {
                       </ul>
                     </nav>
                   )}
-                </aside>
+                </div>
               </div>
             </Section>
 

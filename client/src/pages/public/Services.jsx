@@ -33,7 +33,7 @@ export default function Services() {
           errorTitle="We could not load our services"
           emptyTitle="No services yet"
         >
-          {(services) => <ServicesGrid services={services} />}
+          {(services) => <ServicesGrid services={services} headingLevel="h2" />}
         </QueryState>
       </Section>
 

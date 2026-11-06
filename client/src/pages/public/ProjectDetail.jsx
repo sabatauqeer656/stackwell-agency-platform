@@ -149,7 +149,8 @@ export default function ProjectDetail() {
                   )}
                 </div>
 
-                <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+                {/* A plain div, not <aside>: this column already sits inside the labelled case-study region, and a sidebar landmark must not be nested in another landmark */}
+                <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
                   {project.techStack.length > 0 && (
                     <Card>
                       <h2 className="text-lg">Tech stack</h2>
@@ -185,7 +186,7 @@ export default function ProjectDetail() {
                       </ul>
                     </nav>
                   )}
-                </aside>
+                </div>
               </div>
             </Section>
 

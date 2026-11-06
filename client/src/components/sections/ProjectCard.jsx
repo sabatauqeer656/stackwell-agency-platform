@@ -7,7 +7,8 @@ import SafeImage from '../ui/SafeImage.jsx';
 const MAX_TAGS = 4;
 
 // One portfolio project as a card. The whole card links to the case study.
-export default function ProjectCard({ project }) {
+// `headingLevel`: 'h3' under a section heading, 'h2' straight after the page's h1 (see ServiceCard)
+export default function ProjectCard({ project, headingLevel: Heading = 'h3' }) {
   const tags = project.techStack.slice(0, MAX_TAGS);
   const hiddenTags = project.techStack.length - tags.length;
 
@@ -22,7 +23,7 @@ export default function ProjectCard({ project }) {
             <Badge variant="brand">{project.solution.title}</Badge>
           </div>
         )}
-        <h3 className="mt-4 text-h3">{project.title}</h3>
+        <Heading className="mt-4 text-h3">{project.title}</Heading>
         <p className="mt-1 text-sm font-medium text-slate-500">for {project.clientName}</p>
         <p className="mt-3 flex-1 text-slate-600">{project.summary}</p>
 

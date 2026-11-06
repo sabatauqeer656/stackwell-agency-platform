@@ -33,7 +33,7 @@ export default function Solutions() {
           errorTitle="We could not load our industries"
           emptyTitle="No industries yet"
         >
-          {(solutions) => <SolutionsGrid solutions={solutions} />}
+          {(solutions) => <SolutionsGrid solutions={solutions} headingLevel="h2" />}
         </QueryState>
       </Section>
 
