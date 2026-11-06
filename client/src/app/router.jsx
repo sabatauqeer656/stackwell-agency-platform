@@ -43,8 +43,30 @@ export const router = createBrowserRouter([
       {
         ...page(() => import('../components/admin/RequireAuth.jsx')),
         children: [
-          { index: true, ...page(() => import('../pages/admin/AdminHome.jsx')) },
-          { path: '*', ...page(() => import('../pages/admin/AdminNotFound.jsx')) },
+          {
+            // The frame (sidebar and top bar) around every dashboard page
+            ...page(() => import('../components/admin/AdminLayout.jsx')),
+            children: [
+              { index: true, ...page(() => import('../pages/admin/Dashboard.jsx')) },
+              // These sections are built one by one in the next steps. Until then each shows a placeholder.
+              ...[
+                ['inquiries', 'Inquiries'],
+                ['quotes', 'Quote requests'],
+                ['services', 'Services'],
+                ['solutions', 'Solutions'],
+                ['projects', 'Projects'],
+                ['testimonials', 'Testimonials'],
+                ['team', 'Team'],
+                ['faqs', 'FAQs'],
+              ].map(([path, title]) => ({ path, handle: { title }, ...page(() => import('../pages/admin/ComingSoon.jsx')) })),
+              // Administrators only: the screen shows "no access" to editors (and the API refuses them anyway)
+              {
+                ...page(() => import('../components/admin/RequireAdmin.jsx')),
+                children: [{ path: 'settings', handle: { title: 'Settings' }, ...page(() => import('../pages/admin/ComingSoon.jsx')) }],
+              },
+              { path: '*', ...page(() => import('../pages/admin/AdminNotFound.jsx')) },
+            ],
+          },
         ],
       },
     ],

@@ -9,12 +9,15 @@ import faqRoutes from './faq.routes.js';
 import settingsRoutes from './settings.routes.js';
 import inquiryRoutes from './inquiry.routes.js';
 import quoteRoutes from './quote.routes.js';
+import { dashboardStats } from '../../controllers/stats.controller.js';
 
 // Everything under /api/v1/admin requires a logged-in admin or editor.
 // Guarding the whole router once means a new admin route can never be left open by mistake.
 const router = Router();
 
 router.use(protect, authorize('admin', 'editor'));
+
+router.get('/stats', dashboardStats); // the dashboard home: counts and the latest leads
 
 router.use('/services', serviceRoutes);
 router.use('/solutions', solutionRoutes);
