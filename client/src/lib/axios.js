@@ -2,7 +2,8 @@ import axios from 'axios';
 import { getAccessToken, notifyAuthLost, setAccessToken } from './authToken.js';
 
 const config = {
-  baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:5000/api/v1',
+  // In production the API is on the same address as the site, so a relative path is enough.
+  baseURL: import.meta.env.VITE_API_URL ?? (import.meta.env.PROD ? '/api/v1' : 'http://localhost:5000/api/v1'),
   withCredentials: true, // send the httpOnly refresh-token cookie
   timeout: 15000,
 };
