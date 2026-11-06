@@ -45,10 +45,13 @@ export const createProjectSchema = z.object({
   }),
 });
 
+// On update, the optional fields may also be sent as null, which means "remove it" (see updateProject).
+const clearable = { coverImage: fields.coverImage.nullable(), liveUrl: fields.liveUrl.nullable(), completedAt: fields.completedAt.nullable() };
+
 export const updateProjectSchema = z.object({
   params: z.object({ id: objectId }),
   body: z
-    .object(fields)
+    .object({ ...fields, ...clearable })
     .partial()
     .refine((body) => Object.keys(body).length > 0, 'Send at least one field to update'),
 });

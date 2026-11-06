@@ -7,7 +7,7 @@ import Input from '../ui/Input.jsx';
  * Built on React Hook Form's useFieldArray: `fields`, `append` and `remove` come from it, and each row is
  * registered as `${name}.${index}.value`. Pressing Enter in a row adds a new row instead of submitting the form.
  */
-export default function StringListField({ label, hint, name, fields, register, errors, append, remove, max, placeholder, addLabel }) {
+export default function StringListField({ label, hint, name, fields, register, errors, append, remove, max, itemMax = 120, placeholder, addLabel }) {
   return (
     <fieldset>
       <legend className="text-sm font-medium text-slate-700">{label}</legend>
@@ -20,7 +20,7 @@ export default function StringListField({ label, hint, name, fields, register, e
               className="min-w-0 flex-1"
               aria-label={`${label} ${index + 1}`}
               placeholder={placeholder}
-              maxLength={120}
+              maxLength={itemMax}
               error={errors?.[index]?.value?.message}
               {...register(`${name}.${index}.value`)}
               onKeyDown={(event) => {

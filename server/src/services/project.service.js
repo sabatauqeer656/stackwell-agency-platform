@@ -74,7 +74,18 @@ export async function updateProject(id, data) {
   if (data.solution) await assertSolutionExists(data.solution);
   if (data.slug) data.slug = await uniqueSlug(Project, data.slug, id);
 
-  const project = await withSolution(Project.findByIdAndUpdate(id, data, { returnDocument: 'after', runValidators: true }));
+  // A field sent as null is REMOVED from the document ($unset), not stored as null.
+  const changes = {};
+  const removals = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value === null) removals[key] = 1;
+    else changes[key] = value;
+  }
+  const update = {};
+  if (Object.keys(changes).length) update.$set = changes;
+  if (Object.keys(removals).length) update.$unset = removals;
+
+  const project = await withSolution(Project.findByIdAndUpdate(id, update, { returnDocument: 'after', runValidators: true }));
   if (!project) throw notFound();
   return project;
 }

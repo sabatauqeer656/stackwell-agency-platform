@@ -55,10 +55,14 @@ export const router = createBrowserRouter([
               { path: 'services', ...page(() => import('../pages/admin/Services.jsx')) },
               { path: 'services/new', ...page(() => import('../pages/admin/ServiceEdit.jsx')) },
               { path: 'services/:id', ...page(() => import('../pages/admin/ServiceEdit.jsx')) },
+              { path: 'solutions', ...page(() => import('../pages/admin/Solutions.jsx')) },
+              { path: 'solutions/new', ...page(() => import('../pages/admin/SolutionEdit.jsx')) },
+              { path: 'solutions/:id', ...page(() => import('../pages/admin/SolutionEdit.jsx')) },
+              { path: 'projects', ...page(() => import('../pages/admin/Projects.jsx')) },
+              { path: 'projects/new', ...page(() => import('../pages/admin/ProjectEdit.jsx')) },
+              { path: 'projects/:id', ...page(() => import('../pages/admin/ProjectEdit.jsx')) },
               // These sections are built one by one in the next steps. Until then each shows a placeholder.
               ...[
-                ['solutions', 'Solutions'],
-                ['projects', 'Projects'],
                 ['testimonials', 'Testimonials'],
                 ['team', 'Team'],
                 ['faqs', 'FAQs'],
