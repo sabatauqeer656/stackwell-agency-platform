@@ -12,6 +12,7 @@ import DetailsStep from './quote/DetailsStep.jsx';
 import ProjectStep from './quote/ProjectStep.jsx';
 import ReviewStep from './quote/ReviewStep.jsx';
 import { useServices } from '../../features/services/useServices.js';
+import { FILE_ERROR_CODES, checkFiles } from '../../features/quotes/attachmentRules.js';
 import { clearDraft, loadDraft, saveDraft } from '../../features/quotes/quoteDraft.js';
 import { isSlug, projectTypeForService } from '../../features/quotes/quoteOptions.js';
 import { quoteDefaults, quoteSchema, stepOfField, steps } from '../../features/quotes/quoteSchema.js';
@@ -36,9 +37,9 @@ function buildStart(searchParams) {
   if (isSlug(service)) {
     if (!values.services.includes(service)) values.services = [...values.services, service].slice(0, 6);
     if (!values.projectType && projectTypeForService[service]) values.projectType = projectTypeForService[service];
-    return { values, step: 0 }; // someone who came from a service page starts at the beginning
+    return { values, step: 0, fileCount: 0 }; // someone who came from a service page starts at the beginning
   }
-  return { values, step: draft?.step ?? 0 };
+  return { values, step: draft?.step ?? 0, fileCount: draft?.fileCount ?? 0 };
 }
 
 export default function QuoteWizard() {
@@ -47,11 +48,18 @@ export default function QuoteWizard() {
   const [step, setStep] = useState(start.step);
   const [formError, setFormError] = useState('');
 
+  // The attached files. They live here, in plain React state, and NOT in the form library or in the saved
+  // draft: a File is a handle to something on the visitor's disk, so it cannot be stored as text.
+  const [files, setFiles] = useState([]);
+  const [fileProblems, setFileProblems] = useState([]); // reasons why some files were refused
+
   const servicesQuery = useServices(); // usually already cached from the Services pages
   const mutation = useSendQuote();
 
   const headingRef = useRef(null);
   const confirmationRef = useRef(null);
+  const dropzoneRef = useRef(null); // the file input, so focus can be sent there
+  const pendingDropzoneFocus = useRef(false); // set when the SERVER refused a file
   const pendingFocus = useRef(null); // a field to focus once its step is on screen (after a server error)
   const previousStep = useRef(start.step);
   const sending = useRef(false); // blocks a second submit before React re-renders
@@ -81,12 +89,22 @@ export default function QuoteWizard() {
   const onFieldChange = (event) => {
     const { name } = event.target;
     if (name && errors[name]) trigger(name);
-    saveDraft(getValues(), step);
+    saveDraft(getValues(), step, files.length);
   };
-  // The draft is also saved whenever the step changes
+  // The draft is also saved whenever the step or the number of files changes
   useEffect(() => {
-    saveDraft(getValues(), step);
-  }, [getValues, step]);
+    saveDraft(getValues(), step, files.length);
+  }, [getValues, step, files.length]);
+
+  const addFiles = (incoming) => {
+    const { accepted, problems } = checkFiles(files, incoming);
+    setFiles([...files, ...accepted]);
+    setFileProblems(problems); // replaces the previous message: it always describes the LAST attempt
+  };
+  const removeFile = (index) => {
+    setFiles(files.filter((_, position) => position !== index));
+    setFileProblems([]);
+  };
 
   // When the step changes, move keyboard focus to it (so Tab continues from the new step).
   // Comparing with the PREVIOUS step (instead of a "first run" flag) also keeps focus alone on page load,
@@ -94,7 +112,10 @@ export default function QuoteWizard() {
   useEffect(() => {
     if (previousStep.current === step) return;
     previousStep.current = step;
-    if (pendingFocus.current) {
+    if (pendingDropzoneFocus.current) {
+      dropzoneRef.current?.focus();
+      pendingDropzoneFocus.current = false;
+    } else if (pendingFocus.current) {
       setFocus(pendingFocus.current);
       pendingFocus.current = null;
     } else {
@@ -123,12 +144,18 @@ export default function QuoteWizard() {
       const payload = { ...data, services: data.services.map((slug) => idBySlug[slug]).filter(Boolean) };
       if (payload.services.length === 0) delete payload.services;
 
-      await mutation.mutateAsync(payload);
+      await mutation.mutateAsync({ data: payload, files });
       clearDraft();
     } catch (error) {
-      const { message, details } = getApiError(error);
+      const { code, message, details } = getApiError(error);
       const fieldErrors = details.filter((detail) => stepOfField(detail.field) >= 0);
-      if (fieldErrors.length > 0) {
+      if (FILE_ERROR_CODES.includes(code)) {
+        // The server refused a file (it looks INSIDE files, so it can catch a disguised one the browser let through).
+        // Go back to the step where files are attached and say which one.
+        setFileProblems([message]);
+        pendingDropzoneFocus.current = true;
+        setStep(stepOfField('description'));
+      } else if (fieldErrors.length > 0) {
         // The server disliked something: show the message next to the field and go back to its step
         fieldErrors.forEach((detail) => setError(detail.field, { type: 'server', message: detail.message }));
         pendingFocus.current = fieldErrors[0].field;
@@ -152,6 +179,8 @@ export default function QuoteWizard() {
     mutation.reset();
     reset(quoteDefaults);
     clearDraft();
+    setFiles([]);
+    setFileProblems([]);
     setFormError('');
     setStep(0);
   };
@@ -181,8 +210,19 @@ export default function QuoteWizard() {
 
         {step === 0 && <ProjectStep register={register} errors={errors} servicesQuery={servicesQuery} />}
         {step === 1 && <BudgetStep register={register} errors={errors} />}
-        {step === 2 && <DetailsStep register={register} errors={errors} />}
-        {step === 3 && <ReviewStep values={getValues()} servicesQuery={servicesQuery} onEdit={setStep} />}
+        {step === 2 && (
+          <DetailsStep
+            register={register}
+            errors={errors}
+            files={files}
+            fileProblems={fileProblems}
+            lostFiles={start.fileCount > 0 && files.length === 0}
+            onAddFiles={addFiles}
+            onRemoveFile={removeFile}
+            dropzoneRef={dropzoneRef}
+          />
+        )}
+        {step === 3 && <ReviewStep values={getValues()} files={files} servicesQuery={servicesQuery} onEdit={setStep} />}
 
         {formError && (
           <div role="alert" className="mt-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">

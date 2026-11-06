@@ -1,4 +1,5 @@
 import Button from '../../ui/Button.jsx';
+import { formatBytes } from '../../../features/quotes/attachmentRules.js';
 import { budgetRanges, labelOf, projectTypes, timelines } from '../../../features/quotes/quoteOptions.js';
 
 // One block of the summary, with an "Edit" button that jumps back to that step.
@@ -26,7 +27,7 @@ function Row({ label, children }) {
 }
 
 // Step 4: everything the visitor entered, read-only, before it is sent.
-export default function ReviewStep({ values, servicesQuery, onEdit }) {
+export default function ReviewStep({ values, files, servicesQuery, onEdit }) {
   const serviceTitles = values.services.map(
     (slug) => servicesQuery.data?.find((service) => service.slug === slug)?.title
   ).filter(Boolean);
@@ -46,6 +47,19 @@ export default function ReviewStep({ values, servicesQuery, onEdit }) {
       <Summary title="Your details" step={2} onEdit={onEdit}>
         <Row label="Description">
           <span className="whitespace-pre-line font-normal">{values.description}</span>
+        </Row>
+        <Row label="Attachments">
+          {files.length > 0 ? (
+            <ul className="font-normal">
+              {files.map((file) => (
+                <li key={`${file.name}-${file.size}`}>
+                  {file.name} <span className="text-slate-500">({formatBytes(file.size)})</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            'No files attached'
+          )}
         </Row>
         <Row label="Name">{values.name}</Row>
         <Row label="Email">{values.email}</Row>

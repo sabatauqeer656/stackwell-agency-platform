@@ -18,17 +18,20 @@ export function loadDraft() {
     for (const key of textKeys) if (typeof saved.values?.[key] === 'string') values[key] = saved.values[key];
     if (Array.isArray(saved.values?.services)) values.services = saved.values.services.filter((s) => typeof s === 'string').slice(0, 6);
     const step = Number.isInteger(saved.step) && saved.step >= 0 && saved.step <= 3 ? saved.step : 0;
-    return { values, step };
+    // Files cannot be stored (a File is not text), so only HOW MANY there were is kept.
+    // That lets the wizard tell the visitor "please attach your files again" after a refresh.
+    const fileCount = Number.isInteger(saved.fileCount) && saved.fileCount > 0 ? Math.min(saved.fileCount, 3) : 0;
+    return { values, step, fileCount };
   } catch {
     return null; // storage unavailable (private window) or corrupted: just start fresh
   }
 }
 
-export function saveDraft(values, step) {
+export function saveDraft(values, step, fileCount = 0) {
   try {
     const safe = { ...values };
     delete safe.website; // never store the honeypot
-    sessionStorage.setItem(KEY, JSON.stringify({ values: safe, step }));
+    sessionStorage.setItem(KEY, JSON.stringify({ values: safe, step, fileCount }));
   } catch {
     /* storage full or blocked: the wizard still works, it just cannot remember */
   }
