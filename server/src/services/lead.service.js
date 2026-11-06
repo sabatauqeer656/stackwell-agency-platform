@@ -5,12 +5,13 @@ import { escapeRegex } from '../utils/escapeRegex.js';
 // Shared logic for "leads": things visitors send us (inquiries, quote requests).
 //   label         - used in messages, e.g. 'Inquiry'
 //   searchFields  - fields the admin search box looks in
+//   populate      - optional { path, select }: replaces ids with the documents they point to (used by getById and update)
 //   beforeCreate  - optional async check on the visitor's data (e.g. "do these services exist?")
 //   uploadFiles   - optional: stores the uploaded files and returns what to save with the lead
 //   discardFiles  - optional: deletes files that were stored (used when saving fails, or a lead is deleted)
 //   afterCreate   - optional: runs in the BACKGROUND once the lead is saved (e.g. send emails). It is not awaited,
 //                   so a slow or failing mail server can never delay or break the visitor's submission.
-export function createLeadService({ Model, label, searchFields, beforeCreate, afterCreate, uploadFiles, discardFiles }) {
+export function createLeadService({ Model, label, searchFields, populate, beforeCreate, afterCreate, uploadFiles, discardFiles }) {
   const notFound = () => new AppError(`${label} not found`, 404, 'NOT_FOUND');
 
   return {
@@ -54,14 +55,16 @@ export function createLeadService({ Model, label, searchFields, beforeCreate, af
     },
 
     async getById(id) {
-      const doc = await Model.findById(id);
+      const query = Model.findById(id);
+      const doc = await (populate ? query.populate(populate.path, populate.select) : query);
       if (!doc) throw notFound();
       return doc;
     },
 
     // Admins can only change status and notes (the validator allows nothing else)
     async update(id, data) {
-      const doc = await Model.findByIdAndUpdate(id, data, { returnDocument: 'after', runValidators: true });
+      const query = Model.findByIdAndUpdate(id, data, { returnDocument: 'after', runValidators: true });
+      const doc = await (populate ? query.populate(populate.path, populate.select) : query);
       if (!doc) throw notFound();
       return doc;
     },

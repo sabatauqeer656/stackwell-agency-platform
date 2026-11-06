@@ -14,6 +14,7 @@ const crud = createLeadService({
   Model: QuoteRequest,
   label: 'Quote request',
   searchFields: ['name', 'email', 'company', 'description'],
+  populate: { path: 'services', select: 'title slug' }, // the dashboard shows service titles, not ids
   // Every chosen service must exist and be published. Repeated ids are counted once.
   async beforeCreate(data) {
     if (!data.services?.length) return;

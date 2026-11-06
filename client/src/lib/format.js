@@ -19,6 +19,13 @@ export function timeAgo(value) {
   return 'just now';
 }
 
+// 302 -> "302 B", 20480 -> "20 KB", 3145728 -> "3.0 MB"
+export function formatFileSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export const formatDate = (value) =>
   new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 

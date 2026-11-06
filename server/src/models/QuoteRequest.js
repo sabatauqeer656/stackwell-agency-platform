@@ -11,7 +11,19 @@ const attachmentSchema = new mongoose.Schema(
     mimeType: { type: String, required: true },
     size: { type: Number, required: true, min: 1 },
   },
-  { _id: false }
+  {
+    _id: false,
+    toJSON: {
+      // The browser only needs name, type and size. The storage ids stay on the server, where the signed
+      // download links are made, so they are not sent in responses.
+      transform(doc, ret) {
+        delete ret.publicId;
+        delete ret.resourceType;
+        delete ret.format;
+        return ret;
+      },
+    },
+  }
 );
 
 // A request submitted through the multi-step quote wizard.

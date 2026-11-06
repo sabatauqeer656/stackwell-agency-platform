@@ -50,9 +50,10 @@ export const router = createBrowserRouter([
               { index: true, ...page(() => import('../pages/admin/Dashboard.jsx')) },
               { path: 'inquiries', ...page(() => import('../pages/admin/Inquiries.jsx')) },
               { path: 'inquiries/:id', ...page(() => import('../pages/admin/InquiryDetail.jsx')) },
+              { path: 'quotes', ...page(() => import('../pages/admin/Quotes.jsx')) },
+              { path: 'quotes/:id', ...page(() => import('../pages/admin/QuoteDetail.jsx')) },
               // These sections are built one by one in the next steps. Until then each shows a placeholder.
               ...[
-                ['quotes', 'Quote requests'],
                 ['services', 'Services'],
                 ['solutions', 'Solutions'],
                 ['projects', 'Projects'],

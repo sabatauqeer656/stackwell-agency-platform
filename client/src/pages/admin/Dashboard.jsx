@@ -140,6 +140,7 @@ function Overview({ stats }) {
           items={stats.recent.quotes}
           describe={(item) => labelOf(projectTypes, item.projectType)}
           to="/admin/quotes"
+          itemTo={(item) => `/admin/quotes/${item._id}`}
           emptyText="No quote requests yet. They appear here as soon as someone sends one."
         />
       </div>
