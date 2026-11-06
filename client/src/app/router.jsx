@@ -48,9 +48,10 @@ export const router = createBrowserRouter([
             ...page(() => import('../components/admin/AdminLayout.jsx')),
             children: [
               { index: true, ...page(() => import('../pages/admin/Dashboard.jsx')) },
+              { path: 'inquiries', ...page(() => import('../pages/admin/Inquiries.jsx')) },
+              { path: 'inquiries/:id', ...page(() => import('../pages/admin/InquiryDetail.jsx')) },
               // These sections are built one by one in the next steps. Until then each shows a placeholder.
               ...[
-                ['inquiries', 'Inquiries'],
                 ['quotes', 'Quote requests'],
                 ['services', 'Services'],
                 ['solutions', 'Solutions'],

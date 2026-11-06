@@ -7,6 +7,8 @@ const variants = {
   secondary: 'bg-brand-50 text-brand-700 hover:bg-brand-100',
   outline: 'border border-slate-300 bg-white text-ink hover:bg-slate-50',
   ghost: 'text-slate-700 hover:bg-slate-100',
+  // For actions that cannot be undone (delete)
+  danger: 'bg-red-600 text-white shadow-sm hover:bg-red-700',
   // For dark backgrounds (hero, call-to-action bands)
   light: 'bg-white text-brand-700 shadow-sm hover:bg-brand-50',
   'outline-light': 'border border-white/40 text-white hover:bg-white/10',

@@ -22,7 +22,7 @@ function StatCard({ label, value, to, hint, highlight = false }) {
 }
 
 // The latest few leads, newest first. `describe` turns one item into the line of text under the name.
-function RecentList({ title, items, describe, to, emptyText }) {
+function RecentList({ title, items, describe, to, itemTo = () => to, emptyText }) {
   return (
     // min-w-0: this card is a grid item. Grid items refuse to shrink below the width of their content, so one long
     // subject line would stretch the card (and the whole page) past the edge of a phone. min-w-0 lets it shrink and `truncate` do its job.
@@ -39,7 +39,7 @@ function RecentList({ title, items, describe, to, emptyText }) {
         <ul className="divide-y divide-slate-100">
           {items.map((item) => (
             <li key={item._id}>
-              <Link to={to} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-slate-50">
+              <Link to={itemTo(item)} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-slate-50">
                 <span className="min-w-0">
                   <span className="block truncate font-medium text-ink">{item.name}</span>
                   <span className="block truncate text-sm text-slate-500">{describe(item)}</span>
@@ -132,6 +132,7 @@ function Overview({ stats }) {
           items={stats.recent.inquiries}
           describe={(item) => item.subject}
           to="/admin/inquiries"
+          itemTo={(item) => `/admin/inquiries/${item._id}`}
           emptyText="No inquiries yet. They appear here as soon as someone uses the contact form."
         />
         <RecentList
