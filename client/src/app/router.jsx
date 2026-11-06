@@ -32,6 +32,23 @@ export const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
+  // The admin dashboard. All of it is lazy-loaded, so public visitors never download any of it.
+  // AdminRoot provides the login state; RequireAuth guards every page except the login page.
+  {
+    path: '/admin',
+    HydrateFallback: InitialLoading,
+    ...page(() => import('../pages/admin/AdminRoot.jsx')),
+    children: [
+      { path: 'login', ...page(() => import('../pages/admin/Login.jsx')) },
+      {
+        ...page(() => import('../components/admin/RequireAuth.jsx')),
+        children: [
+          { index: true, ...page(() => import('../pages/admin/AdminHome.jsx')) },
+          { path: '*', ...page(() => import('../pages/admin/AdminNotFound.jsx')) },
+        ],
+      },
+    ],
+  },
   // Temporary standalone pages, removed before launch
   { path: '/design-preview', HydrateFallback: InitialLoading, ...page(() => import('../pages/public/DesignPreview.jsx')) },
   { path: '/layout-preview', HydrateFallback: InitialLoading, ...page(() => import('../pages/public/LayoutPreview.jsx')) },
