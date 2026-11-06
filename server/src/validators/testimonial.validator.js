@@ -28,10 +28,13 @@ export const createTestimonialSchema = z.object({
   }),
 });
 
+// On update, the optional fields may also be sent as null, which means "remove it" (project: unlink it).
+const clearable = { company: fields.company.nullable(), avatar: fields.avatar.nullable() };
+
 export const updateTestimonialSchema = z.object({
   params: z.object({ id: objectId }),
   body: z
-    .object(fields)
+    .object({ ...fields, ...clearable })
     .partial()
     .refine((body) => Object.keys(body).length > 0, 'Send at least one field to update'),
 });

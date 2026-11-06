@@ -64,11 +64,12 @@ export const router = createBrowserRouter([
               { path: 'team', ...page(() => import('../pages/admin/Team.jsx')) },
               { path: 'team/new', ...page(() => import('../pages/admin/TeamEdit.jsx')) },
               { path: 'team/:id', ...page(() => import('../pages/admin/TeamEdit.jsx')) },
-              // These sections are built one by one in the next steps. Until then each shows a placeholder.
-              ...[
-                ['testimonials', 'Testimonials'],
-                ['faqs', 'FAQs'],
-              ].map(([path, title]) => ({ path, handle: { title }, ...page(() => import('../pages/admin/ComingSoon.jsx')) })),
+              { path: 'testimonials', ...page(() => import('../pages/admin/Testimonials.jsx')) },
+              { path: 'testimonials/new', ...page(() => import('../pages/admin/TestimonialEdit.jsx')) },
+              { path: 'testimonials/:id', ...page(() => import('../pages/admin/TestimonialEdit.jsx')) },
+              { path: 'faqs', ...page(() => import('../pages/admin/Faqs.jsx')) },
+              { path: 'faqs/new', ...page(() => import('../pages/admin/FaqEdit.jsx')) },
+              { path: 'faqs/:id', ...page(() => import('../pages/admin/FaqEdit.jsx')) },
               // Administrators only: the screen shows "no access" to editors (and the API refuses them anyway)
               {
                 ...page(() => import('../components/admin/RequireAdmin.jsx')),

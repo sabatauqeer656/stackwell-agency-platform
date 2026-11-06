@@ -9,6 +9,7 @@ const crud = createSimpleCrud({
   label: 'Testimonial',
   searchField: 'clientName',
   populate: { path: 'project', select: 'title slug' },
+  imageFields: ['avatar'], // an uploaded avatar is removed from Cloudinary when replaced, removed or the testimonial is deleted
   // A testimonial may point at a project, but only one that exists
   async beforeWrite(data) {
     if (data.project && !(await Project.exists({ _id: data.project }))) {
