@@ -64,6 +64,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* The navbar is sticky (64px tall). Without this, scrolling a focused field or an #anchor
+       into view can leave it hidden underneath the navbar. */
+    scroll-padding-top: 5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {

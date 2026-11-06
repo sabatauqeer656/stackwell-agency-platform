@@ -3,7 +3,7 @@ import Seo from '../../components/Seo.jsx';
 import PageHeader from '../../components/layout/PageHeader.jsx';
 import Section from '../../components/layout/Section.jsx';
 import ContactDetails from '../../components/sections/ContactDetails.jsx';
-import ContactFormPlaceholder from '../../components/sections/ContactFormPlaceholder.jsx';
+import ContactForm from '../../components/forms/ContactForm.jsx';
 import Button from '../../components/ui/Button.jsx';
 import Card from '../../components/ui/Card.jsx';
 import { useSettings } from '../../features/settings/useSettings.js';
@@ -52,7 +52,7 @@ export default function Contact() {
       <Section aria-label="Get in touch" className="pt-4 sm:pt-8">
         <div className="grid gap-8 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <ContactFormPlaceholder />
+            <ContactForm />
           </div>
 
           <div className="space-y-6 lg:col-span-2">
