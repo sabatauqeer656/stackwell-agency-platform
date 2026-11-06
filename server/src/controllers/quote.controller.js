@@ -1,7 +1,10 @@
 import QuoteRequest from '../models/QuoteRequest.js';
 import Service from '../models/Service.js';
 import AppError from '../utils/AppError.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import { sendSuccess } from '../utils/apiResponse.js';
 import { createLeadService } from '../services/lead.service.js';
+import { DOWNLOAD_LINK_LIFETIME_SECONDS, deleteAttachments, getDownloadUrl, uploadAttachments } from '../services/storage.service.js';
 import { createLeadController } from './lead.controller.js';
 
 export const THANK_YOU = 'Thank you! We received your request and will send you a quote within 2 business days.';
@@ -22,9 +25,25 @@ const crud = createLeadService({
     }
     data.services = unique;
   },
+  uploadFiles: uploadAttachments,
+  discardFiles: deleteAttachments,
 });
 
 export const { createPublic, listAdmin, getAdmin, update, remove } = createLeadController(crud, {
   label: 'Quote request',
   thankYou: THANK_YOU,
+});
+
+// Admin only (the route sits behind protect + authorize). Returns a signed link that works for five
+// minutes. The link is created fresh on every request, so it cannot be bookmarked or passed around for long.
+export const downloadAttachment = asyncHandler(async (req, res) => {
+  const quote = await crud.getById(req.params.id);
+  const attachment = quote.attachments[req.params.index];
+  if (!attachment) throw new AppError('Attachment not found', 404, 'NOT_FOUND');
+
+  sendSuccess(res, {
+    url: getDownloadUrl(attachment),
+    originalName: attachment.originalName,
+    expiresInSeconds: DOWNLOAD_LINK_LIFETIME_SECONDS,
+  });
 });

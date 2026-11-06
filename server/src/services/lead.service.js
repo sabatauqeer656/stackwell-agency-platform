@@ -6,15 +6,25 @@ import { escapeRegex } from '../utils/escapeRegex.js';
 //   label         - used in messages, e.g. 'Inquiry'
 //   searchFields  - fields the admin search box looks in
 //   beforeCreate  - optional async check on the visitor's data (e.g. "do these services exist?")
-export function createLeadService({ Model, label, searchFields, beforeCreate }) {
+//   uploadFiles   - optional: stores the uploaded files and returns what to save with the lead
+//   discardFiles  - optional: deletes files that were stored (used when saving fails, or a lead is deleted)
+export function createLeadService({ Model, label, searchFields, beforeCreate, uploadFiles, discardFiles }) {
   const notFound = () => new AppError(`${label} not found`, 404, 'NOT_FOUND');
 
   return {
     // Public. Returns nothing: a visitor must never get stored data back.
-    async create(data) {
+    async create(data, files = []) {
       const { website, ...clean } = data; // the honeypot field is never saved
       await beforeCreate?.(clean);
-      await Model.create(clean);
+
+      // Files are stored LAST, after every check has passed, so rejected requests never cost an upload
+      const attachments = files.length > 0 && uploadFiles ? await uploadFiles(files) : [];
+      try {
+        await Model.create({ ...clean, ...(uploadFiles && { attachments }) });
+      } catch (error) {
+        await discardFiles?.(attachments); // do not leave orphan files behind if saving the lead failed
+        throw error;
+      }
     },
 
     async listAdmin({ page, limit, status, search }) {
@@ -49,6 +59,7 @@ export function createLeadService({ Model, label, searchFields, beforeCreate }) 
     async remove(id) {
       const doc = await Model.findByIdAndDelete(id);
       if (!doc) throw notFound();
+      await discardFiles?.(doc.attachments); // the files belong to the lead: they go with it
     },
   };
 }

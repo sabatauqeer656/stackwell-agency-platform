@@ -7,7 +7,7 @@ import { sendSuccess } from '../utils/apiResponse.js';
 export function createLeadController(crud, { label, thankYou }) {
   return {
     createPublic: asyncHandler(async (req, res) => {
-      await crud.create(req.body);
+      await crud.create(req.body, req.files); // req.files only exists when the request carried files
       sendSuccess(res, { message: thankYou }, { status: 201 });
     }),
 

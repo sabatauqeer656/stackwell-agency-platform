@@ -56,6 +56,7 @@ Server (`server/.env`), validated with Zod at startup. The server refuses to sta
 | `JWT_ACCESS_EXPIRES_IN` | no | `15m` | Access token lifetime |
 | `JWT_REFRESH_SECRET` | yes | | Signs refresh tokens (min 32 characters, different from the access secret) |
 | `JWT_REFRESH_EXPIRES_DAYS` | no | `7` | Refresh token lifetime in days |
+| `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | yes | | File storage ([free Cloudinary account](https://cloudinary.com)). Quote attachments are stored privately and opened only through short-lived signed links. The secret is a password, never commit it |
 | `ADMIN_NAME`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` | no | | Only read by `npm run seed:admin`. Remove the password afterwards |
 
 Client (`client/.env`): `VITE_API_URL`, the API base URL. Variables prefixed `VITE_` are public; never put secrets in them.

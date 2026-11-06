@@ -82,3 +82,11 @@ export const updateQuoteSchema = z.object({
     .partial()
     .refine((body) => Object.keys(body).length > 0, 'Send at least one field to update'),
 });
+
+// GET /admin/quotes/:id/attachments/:index/download  (the quote has at most 3 attachments: 0, 1 or 2)
+export const attachmentDownloadSchema = z.object({
+  params: z.object({
+    id: objectId,
+    index: z.coerce.number().int().min(0).max(2),
+  }),
+});

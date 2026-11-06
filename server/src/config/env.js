@@ -27,6 +27,12 @@ const envSchema = z.object({
   JWT_REFRESH_SECRET: z.string().min(32, 'must be at least 32 characters'),
   JWT_REFRESH_EXPIRES_DAYS: z.coerce.number().int().positive().default(7),
 
+  // Cloudinary stores uploaded files (quote attachments now, team and project images later).
+  // The API secret lets anyone upload and delete files in your account, so it is never committed.
+  CLOUDINARY_CLOUD_NAME: z.string().min(1, 'is required (Cloudinary dashboard)'),
+  CLOUDINARY_API_KEY: z.string().min(1, 'is required (Cloudinary dashboard)'),
+  CLOUDINARY_API_SECRET: z.string().min(1, 'is required (Cloudinary dashboard)'),
+
   // Only read by `npm run seed:admin` to create the first admin account
   ADMIN_NAME: z.string().optional(),
   ADMIN_EMAIL: z.string().optional(),
