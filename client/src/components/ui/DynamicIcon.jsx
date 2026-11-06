@@ -20,6 +20,9 @@ import {
 // To support a new icon name in the admin dashboard, add it here.
 const icons = { Briefcase, Code, Database, GraduationCap, HeartPulse, Landmark, Layers, LifeBuoy, Palette, Server, ShoppingCart, Smartphone, Store };
 
+// The names an editor can choose from in the dashboard
+export const iconNames = Object.keys(icons);
+
 export default function DynamicIcon({ name, ...props }) {
   const Icon = icons[name] ?? Layers; // unknown name -> a safe default instead of a crash
   return <Icon aria-hidden="true" {...props} />;

@@ -52,9 +52,11 @@ export const router = createBrowserRouter([
               { path: 'inquiries/:id', ...page(() => import('../pages/admin/InquiryDetail.jsx')) },
               { path: 'quotes', ...page(() => import('../pages/admin/Quotes.jsx')) },
               { path: 'quotes/:id', ...page(() => import('../pages/admin/QuoteDetail.jsx')) },
+              { path: 'services', ...page(() => import('../pages/admin/Services.jsx')) },
+              { path: 'services/new', ...page(() => import('../pages/admin/ServiceEdit.jsx')) },
+              { path: 'services/:id', ...page(() => import('../pages/admin/ServiceEdit.jsx')) },
               // These sections are built one by one in the next steps. Until then each shows a placeholder.
               ...[
-                ['services', 'Services'],
                 ['solutions', 'Solutions'],
                 ['projects', 'Projects'],
                 ['testimonials', 'Testimonials'],

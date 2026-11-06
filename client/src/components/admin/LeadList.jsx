@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Inbox } from 'lucide-react';
 import Seo from '../Seo.jsx';
@@ -13,6 +12,7 @@ import QueryState from '../ui/QueryState.jsx';
 import Skeleton from '../ui/Skeleton.jsx';
 import { statusLabel, statusVariant } from '../../features/admin/statusStyles.js';
 import { useListParams } from '../../features/admin/useListParams.js';
+import { useSearchBox } from '../../features/admin/useSearchBox.js';
 import { cn } from '../../lib/utils.js';
 import { formatDateTime, timeAgo } from '../../lib/format.js';
 
@@ -41,17 +41,7 @@ export default function LeadList({ title, intro, noun, plural, statuses, useData
   const query = useData({ page, status, search });
   const statusOptions = [{ value: '', label: 'All' }, ...statuses.map((value) => ({ value, label: statusLabel[value] }))];
 
-  // The box keeps what you type at once; the address (and the request) update 350 ms after you stop typing,
-  // so a request is not sent for every single letter.
-  const [text, setText] = useState(search);
-  const timer = useRef(null);
-  useEffect(() => () => clearTimeout(timer.current), []);
-  const onSearchInput = (event) => {
-    const value = event.target.value;
-    setText(value);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setSearch(value.trim()), 350);
-  };
+  const { text, setText, onChange: onSearchInput } = useSearchBox(search, setSearch);
   const clearAll = () => {
     setText('');
     clear();
