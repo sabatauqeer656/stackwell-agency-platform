@@ -1,0 +1,58 @@
+name: CI
+
+# Runs on every push to main and on every pull request: install, lint, test and build.
+# A red cross on a commit means something is broken before it ever reaches the live site.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push cancels the run that is still going for the same branch
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # A real MongoDB for the API tests, started next to the job. (Locally the tests start a throwaway in-memory
+    # MongoDB instead; here a ready-made container is much quicker than downloading that every time.)
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # ci = install exactly what package-lock.json says (and fail if it is out of date)
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test the API
+        run: npm test -w server
+        env:
+          MONGO_TEST_URI: mongodb://127.0.0.1:27017
+
+      - name: Test the client
+        run: npm test -w client
+
+      # Also proves the production build works (the same command Render runs)
+      - name: Build
+        run: npm run build

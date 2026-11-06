@@ -7,7 +7,8 @@ const optionalUrl = httpUrl.or(z.literal(''));
 const fields = {
   companyName: z.string().trim().min(2).max(100),
   tagline: z.string().trim().max(200),
-  email: z.email('Enter a valid email').trim().toLowerCase(),
+  // Trim BEFORE checking the format: an address pasted with a trailing space is still a valid address
+  email: z.string().trim().toLowerCase().pipe(z.email('Enter a valid email')),
   phone: z.string().trim().max(30),
   address: z.string().trim().max(200),
   linkedin: optionalUrl,

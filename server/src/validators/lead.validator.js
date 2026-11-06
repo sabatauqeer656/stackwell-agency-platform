@@ -12,7 +12,8 @@ import {
 // ---- Fields shared by both public forms ----
 const contactFields = {
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100),
-  email: z.email('Enter a valid email').trim().toLowerCase().max(254),
+  // Trim BEFORE checking the format: an address pasted with a trailing space is still a valid address
+  email: z.string().trim().toLowerCase().max(254).pipe(z.email('Enter a valid email')),
   phone: z
     .string()
     .trim()

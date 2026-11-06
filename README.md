@@ -1,5 +1,7 @@
 # Stackwell Agency Platform
 
+[![CI](https://github.com/sabatauqeer656/stackwell-agency-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/sabatauqeer656/stackwell-agency-platform/actions/workflows/ci.yml)
+
 A full-stack MERN website for a (fictional) software agency: a marketing site that turns visitors into leads, and an admin dashboard for managing those leads and the site's content.
 
 **Live demo:** https://stackwell-agency-platform.onrender.com (hosted on Render's free plan, so the first visit after a quiet period can take about 30 seconds while the server wakes up). The admin dashboard is at `/admin`; its login is private.
@@ -14,7 +16,7 @@ A full-stack MERN website for a (fictional) software agency: a marketing site th
 - **Careful file handling:** uploads are verified by their actual content (not the file name), size-limited, stored privately (quote attachments, opened only through expiring signed links) or publicly (website images), and cleaned up when no longer used.
 - **A complete admin dashboard:** lead pipeline, six content editors, image uploads and site settings. The editors share one configurable data layer and one form hook, so adding a content type is mostly configuration.
 - **Built to be reliable:** every list and form handles loading, error and empty states; unsaved changes are guarded; edits show on the public site without a reload; and everything works at phone width.
-- **Verified in a real browser:** each feature was tested end to end in Chrome against the real database and file storage, including failure cases such as fake file types, oversized files and blocked roles.
+- **Tested and checked on every push:** 142 automated tests (API and client) plus lint and a production build run in GitHub Actions, and each feature was also verified end to end in Chrome against the real services, including failure cases such as fake file types, oversized files and blocked roles.
 - **Accessible and discoverable:** keyboard and screen-reader support, per-page SEO, structured data and `robots.txt`.
 
 ## What it does
@@ -109,6 +111,8 @@ Run from the project root.
 | `npm run build` | Builds the client for production into `client/dist` |
 | `npm start` | Starts the server without file watching (production) |
 | `npm run lint` | Lints the client |
+| `npm test` | Runs the API tests and the client tests (see [Testing](#testing)) |
+| `npm test -w server` / `npm test -w client` | Runs only one of the two suites |
 | `npm run seed` | Adds demo content that is missing. Safe to run again: existing content is never overwritten |
 | `npm run seed -- --reset --yes` | Deletes all site content, then re-adds the demo content. Users, inquiries and quote requests are never touched |
 | `npm run seed:admin` | Creates the first admin account from the `ADMIN_*` values in `server/.env` |
@@ -200,7 +204,20 @@ Pushing to `main` redeploys automatically.
 
 ## Testing
 
-The API, the public site and the admin dashboard were verified end to end during development with real-browser (Chrome) and real-service checks: uploads to Cloudinary, email composition, role restrictions, unsaved-changes guards, cache refreshes and phone-width layouts. A committed automated test suite is planned for Phase 6.
+`npm test` runs two suites, and **GitHub Actions runs them (plus lint and a production build) on every push** (see `.github/workflows/ci.yml`).
+
+**API tests** (`server/test`, Node's built-in test runner, 74 tests). They start the real Express app against a throwaway MongoDB, so they never touch your own database, Cloudinary account or mail server:
+- **Authentication:** login (the same answer for a wrong password and an unknown email), httpOnly refresh cookie, session renewal, logout revoking every token, deactivated users, and login rate limiting.
+- **Authorization:** every admin route refuses visitors who are not signed in; editors cannot delete or change settings; drafts never leak to the public API.
+- **Content:** services, solutions, projects, team, testimonials, FAQs and settings (validation, unique web addresses, draft visibility, pagination, blocked deletes, "send null to remove a field").
+- **Leads:** the contact form and quote wizard (honeypot, rate limit, a visitor cannot set a status), notification emails (HTML and header injection), and attachment and image upload rejection (fake file types, too many or too large files).
+- **Unit tests** of the small pure helpers and validation rules.
+
+The first run downloads a MongoDB binary (about 700 MB, then cached). Set `MONGO_TEST_URI=mongodb://127.0.0.1:27017` to use a MongoDB you already run instead.
+
+**Client tests** (`client/src/**/*.test.*`, Vitest and Testing Library, 68 tests): form rules for every editor and public form, helpers, accessible labelling and states of the UI components (fields, buttons, pagination, dialogs), and the contact form end to end against a fake server (validation, double-submit guard, server and network errors).
+
+**Also checked by hand** during development with real-browser (Chrome) runs against the real services: uploads to Cloudinary, cache refreshes after edits, unsaved-changes guards, phone-width layouts, and an `axe-core` accessibility scan of every public page, admin screen and interactive state.
 
 ## Temporary preview pages
 
@@ -214,4 +231,5 @@ While the UI is built, two pages show the design system and components: `/design
 - [x] **Phase 4: Lead capture.** Contact form, quote wizard, file uploads, email notifications.
 - [x] **Phase 5: Admin dashboard.** Login, lead pipeline, content management, image uploads, settings.
 - [x] **Deployed** to Render (single web service).
-- [ ] **Phase 6: Polish.** Accessibility audit, committed automated tests, sitemap, screenshots, removing the preview pages.
+- [x] **Accessibility audit** (axe-core and keyboard checks) and **automated tests with CI.**
+- [ ] **Phase 6: Polish.** Sitemap, screenshots, removing the preview pages.
