@@ -4,6 +4,7 @@ import AppError from '../utils/AppError.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import { sendSuccess } from '../utils/apiResponse.js';
 import { createLeadService } from '../services/lead.service.js';
+import { notifyQuote } from '../services/notifications.service.js';
 import { DOWNLOAD_LINK_LIFETIME_SECONDS, deleteAttachments, getDownloadUrl, uploadAttachments } from '../services/storage.service.js';
 import { createLeadController } from './lead.controller.js';
 
@@ -25,6 +26,7 @@ const crud = createLeadService({
     }
     data.services = unique;
   },
+  afterCreate: notifyQuote,
   uploadFiles: uploadAttachments,
   discardFiles: deleteAttachments,
 });

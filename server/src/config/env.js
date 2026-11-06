@@ -33,10 +33,27 @@ const envSchema = z.object({
   CLOUDINARY_API_KEY: z.string().min(1, 'is required (Cloudinary dashboard)'),
   CLOUDINARY_API_SECRET: z.string().min(1, 'is required (Cloudinary dashboard)'),
 
+  // Email (all optional). Without them the server still works: emails are written to the log
+  // instead of being sent. Fill in SMTP_HOST, SMTP_USER, SMTP_PASS and MAIL_FROM to send for real.
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(465), // 465 = SSL, 587 = STARTTLS
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  MAIL_FROM: z.string().optional(), // e.g. "Stackwell <you@gmail.com>"
+  MAIL_TO: z.string().optional(), // the inbox that receives "new message / new quote" alerts
+
   // Only read by `npm run seed:admin` to create the first admin account
   ADMIN_NAME: z.string().optional(),
   ADMIN_EMAIL: z.string().optional(),
   ADMIN_PASSWORD: z.string().optional(),
+}).superRefine((values, context) => {
+  // Half-filled email settings are almost always a mistake: say so at startup instead of failing at the first email
+  const smtp = ['SMTP_HOST', 'SMTP_USER', 'SMTP_PASS', 'MAIL_FROM'];
+  if (smtp.some((key) => values[key]) && !smtp.every((key) => values[key])) {
+    for (const key of smtp.filter((name) => !values[name])) {
+      context.addIssue({ code: 'custom', path: [key], message: 'is required when any other email setting is set' });
+    }
+  }
 });
 
 const result = envSchema.safeParse(process.env);

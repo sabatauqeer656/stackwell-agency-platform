@@ -8,7 +8,9 @@ import { escapeRegex } from '../utils/escapeRegex.js';
 //   beforeCreate  - optional async check on the visitor's data (e.g. "do these services exist?")
 //   uploadFiles   - optional: stores the uploaded files and returns what to save with the lead
 //   discardFiles  - optional: deletes files that were stored (used when saving fails, or a lead is deleted)
-export function createLeadService({ Model, label, searchFields, beforeCreate, uploadFiles, discardFiles }) {
+//   afterCreate   - optional: runs in the BACKGROUND once the lead is saved (e.g. send emails). It is not awaited,
+//                   so a slow or failing mail server can never delay or break the visitor's submission.
+export function createLeadService({ Model, label, searchFields, beforeCreate, afterCreate, uploadFiles, discardFiles }) {
   const notFound = () => new AppError(`${label} not found`, 404, 'NOT_FOUND');
 
   return {
@@ -19,11 +21,19 @@ export function createLeadService({ Model, label, searchFields, beforeCreate, up
 
       // Files are stored LAST, after every check has passed, so rejected requests never cost an upload
       const attachments = files.length > 0 && uploadFiles ? await uploadFiles(files) : [];
+      let lead;
       try {
-        await Model.create({ ...clean, ...(uploadFiles && { attachments }) });
+        lead = await Model.create({ ...clean, ...(uploadFiles && { attachments }) });
       } catch (error) {
         await discardFiles?.(attachments); // do not leave orphan files behind if saving the lead failed
         throw error;
+      }
+
+      // Fire and forget: the visitor's response does not wait for this
+      if (afterCreate) {
+        Promise.resolve()
+          .then(() => afterCreate(lead))
+          .catch((error) => console.error('Follow-up after saving a lead failed:', error.message));
       }
     },
 
