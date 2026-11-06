@@ -1,36 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CircleCheck, TriangleAlert } from 'lucide-react';
+import { TriangleAlert } from 'lucide-react';
 import Button from '../ui/Button.jsx';
 import Card from '../ui/Card.jsx';
 import Input from '../ui/Input.jsx';
 import Textarea from '../ui/Textarea.jsx';
+import FormConfirmation from './FormConfirmation.jsx';
 import HoneypotField from './HoneypotField.jsx';
 import { contactDefaults, contactFields, contactSchema } from '../../features/inquiries/inquirySchema.js';
 import { useSendInquiry } from '../../features/inquiries/useSendInquiry.js';
 import { getApiError } from '../../lib/apiErrors.js';
-
-// Shown after a successful send. It takes keyboard focus, so screen reader users hear it right away.
-// (React 19 lets a component receive `ref` like any other prop.)
-function Confirmation({ message, onReset, ref }) {
-  return (
-    <Card>
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-        <CircleCheck className="h-6 w-6" aria-hidden="true" />
-      </span>
-      <h2 ref={ref} tabIndex={-1} className="mt-5 text-h3 focus:outline-none">
-        Message sent
-      </h2>
-      <p role="status" className="mt-3 text-lg text-slate-600">
-        {message}
-      </p>
-      <Button variant="outline" className="mt-6" onClick={onReset}>
-        Send another message
-      </Button>
-    </Card>
-  );
-}
 
 export default function ContactForm() {
   const mutation = useSendInquiry();
@@ -48,8 +28,10 @@ export default function ContactForm() {
   } = useForm({
     resolver: zodResolver(contactSchema),
     defaultValues: contactDefaults,
-    mode: 'onBlur', // check a field when the visitor leaves it...
-    reValidateMode: 'onChange', // ...then keep re-checking as they fix it
+    // onTouched: check a field the first time the visitor leaves it, then re-check on every keystroke.
+    // So a red message disappears the moment the value is fixed (not later, when focus moves away,
+    // which could shift the layout under the mouse and swallow a click on the button).
+    mode: 'onTouched',
   });
 
   // Move focus to the confirmation so nobody is left wondering whether it worked
@@ -77,7 +59,9 @@ export default function ContactForm() {
 
   if (mutation.isSuccess) {
     return (
-      <Confirmation
+      <FormConfirmation
+        title="Message sent"
+        resetLabel="Send another message"
         message={mutation.data.message}
         ref={confirmationRef}
         onReset={() => {

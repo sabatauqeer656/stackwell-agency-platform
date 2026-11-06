@@ -28,6 +28,7 @@ export const router = createBrowserRouter([
       { path: '/about', ...page(() => import('../pages/public/About.jsx')) },
       { path: '/faq', ...page(() => import('../pages/public/Faq.jsx')) },
       { path: '/contact', ...page(() => import('../pages/public/Contact.jsx')) },
+      { path: '/quote', ...page(() => import('../pages/public/Quote.jsx')) },
       { path: '*', element: <NotFound /> },
     ],
   },
