@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import Seo from '../../components/Seo.jsx';
 import ConfirmDialog from '../../components/admin/ConfirmDialog.jsx';
+import ImageField from '../../components/admin/ImageField.jsx';
+import ImageListField from '../../components/admin/ImageListField.jsx';
 import StringListField from '../../components/admin/StringListField.jsx';
 import Badge from '../../components/ui/Badge.jsx';
 import Button from '../../components/ui/Button.jsx';
@@ -18,6 +20,7 @@ import Skeleton from '../../components/ui/Skeleton.jsx';
 import Textarea from '../../components/ui/Textarea.jsx';
 import { useAdminProject, useCreateProject, useDeleteProject, useSolutionChoices, useUpdateProject } from '../../features/admin/projects.js';
 import {
+  GALLERY_MAX,
   PROJECT_FIELD_ERRORS_FROM_SERVER,
   RESULTS_MAX,
   RESULT_ITEM_MAX,
@@ -198,6 +201,24 @@ function ProjectForm({ project, solutions }) {
                 addLabel="Add a technology"
               />
             </Card>
+
+            <Card className="space-y-8">
+              <h2 className="text-lg">Images</h2>
+              <Controller
+                control={control}
+                name="coverImage"
+                render={({ field }) => (
+                  <ImageField label="Cover image" value={field.value} onChange={field.onChange} error={errors.coverImage?.message} hint="Shown on the project card and at the top of the case study." />
+                )}
+              />
+              <Controller
+                control={control}
+                name="images"
+                render={({ field }) => (
+                  <ImageListField label="Gallery" value={field.value} onChange={field.onChange} max={GALLERY_MAX} hint="More pictures shown on the case study." />
+                )}
+              />
+            </Card>
           </div>
 
           <div className="min-w-0 space-y-6">
@@ -238,7 +259,6 @@ function ProjectForm({ project, solutions }) {
               </Select>
               <Input label="Completed on" type="date" hint="Optional." error={errors.completedAt?.message} {...register('completedAt')} />
               <Input label="Live website" type="url" inputMode="url" spellCheck={false} hint="Optional. A link to the finished product." placeholder="https://" error={errors.liveUrl?.message} {...register('liveUrl')} />
-              <Input label="Cover image address" type="url" inputMode="url" spellCheck={false} hint="Optional. A link to an image. Uploading images comes in the next step." placeholder="https://" error={errors.coverImage?.message} {...register('coverImage')} />
             </Card>
 
             {/* Only administrators may delete (the API enforces it too). Editors never see this card. */}

@@ -9,6 +9,7 @@ import faqRoutes from './faq.routes.js';
 import settingsRoutes from './settings.routes.js';
 import inquiryRoutes from './inquiry.routes.js';
 import quoteRoutes from './quote.routes.js';
+import uploadRoutes from './upload.routes.js';
 import { dashboardStats } from '../../controllers/stats.controller.js';
 
 // Everything under /api/v1/admin requires a logged-in admin or editor.
@@ -28,5 +29,6 @@ router.use('/faqs', faqRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/inquiries', inquiryRoutes);
 router.use('/quotes', quoteRoutes);
+router.use('/uploads', uploadRoutes);
 
 export default router;

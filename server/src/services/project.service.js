@@ -4,6 +4,8 @@ import AppError from '../utils/AppError.js';
 import { slugify, uniqueSlug } from '../utils/slugify.js';
 import { getPagination, buildMeta } from '../utils/pagination.js';
 import { escapeRegex } from '../utils/escapeRegex.js';
+import { toUpdateOps } from '../utils/updateOps.js';
+import { discardImages } from './storage.service.js';
 
 const notFound = () => new AppError('Project not found', 404, 'NOT_FOUND');
 
@@ -74,23 +76,20 @@ export async function updateProject(id, data) {
   if (data.solution) await assertSolutionExists(data.solution);
   if (data.slug) data.slug = await uniqueSlug(Project, data.slug, id);
 
-  // A field sent as null is REMOVED from the document ($unset), not stored as null.
-  const changes = {};
-  const removals = {};
-  for (const [key, value] of Object.entries(data)) {
-    if (value === null) removals[key] = 1;
-    else changes[key] = value;
-  }
-  const update = {};
-  if (Object.keys(changes).length) update.$set = changes;
-  if (Object.keys(removals).length) update.$unset = removals;
+  // Remember which images the project used BEFORE this change, so any it stops using can be removed from Cloudinary afterwards
+  const before = 'coverImage' in data || 'images' in data ? await Project.findById(id).select('coverImage images').lean() : null;
 
-  const project = await withSolution(Project.findByIdAndUpdate(id, update, { returnDocument: 'after', runValidators: true }));
+  const project = await withSolution(Project.findByIdAndUpdate(id, toUpdateOps(data), { returnDocument: 'after', runValidators: true }));
   if (!project) throw notFound();
+  if (before) {
+    const stillUsed = new Set([project.coverImage, ...project.images]);
+    discardImages([before.coverImage, ...(before.images ?? [])].filter((url) => url && !stillUsed.has(url))); // not awaited: cleanup must not slow down or fail the save
+  }
   return project;
 }
 
 export async function deleteProject(id) {
   const project = await Project.findByIdAndDelete(id);
   if (!project) throw notFound();
+  discardImages([project.coverImage, ...project.images]);
 }

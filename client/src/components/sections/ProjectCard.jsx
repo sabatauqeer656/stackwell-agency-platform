@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Badge from '../ui/Badge.jsx';
 import Card from '../ui/Card.jsx';
+import SafeImage from '../ui/SafeImage.jsx';
 
 const MAX_TAGS = 4;
 
@@ -13,6 +14,8 @@ export default function ProjectCard({ project }) {
   return (
     <Card as={Link} to={`/projects/${project.slug}`} hover className="group w-full">
       <div className="flex h-full flex-col">
+        {/* The cover is decorative here: the title is written right below it */}
+        <SafeImage src={project.coverImage} className="mb-5 aspect-video w-full rounded-lg object-cover" />
         {/* `solution` is the industry, filled in by the API (populate) */}
         {project.solution && (
           <div>

@@ -10,6 +10,7 @@ import Badge from '../../components/ui/Badge.jsx';
 import Button from '../../components/ui/Button.jsx';
 import Card from '../../components/ui/Card.jsx';
 import DetailPageState from '../../components/ui/DetailPageState.jsx';
+import SafeImage from '../../components/ui/SafeImage.jsx';
 import { useProject } from '../../features/projects/useProject.js';
 import { useProjects } from '../../features/projects/useProjects.js';
 import { useSettings } from '../../features/settings/useSettings.js';
@@ -108,6 +109,7 @@ export default function ProjectDetail() {
             </PageHeader>
 
             <Section aria-label={`${project.title} case study`} className="pt-4 sm:pt-8">
+              <SafeImage src={project.coverImage} alt={`${project.title} project preview`} className="mb-12 aspect-video w-full rounded-card object-cover" />
               <div className="grid gap-12 lg:grid-cols-3">
                 <div className="space-y-10 lg:col-span-2">
                   <div>
@@ -128,6 +130,18 @@ export default function ProjectDetail() {
                               <TrendingUp className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />
                               <p className="font-medium text-ink">{result}</p>
                             </Card>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {project.images?.length > 0 && (
+                    <div>
+                      <h2 className="text-h3">Gallery</h2>
+                      <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+                        {project.images.map((src, index) => (
+                          <li key={src}>
+                            <SafeImage src={src} alt={`${project.title} image ${index + 1}`} className="aspect-video w-full rounded-card object-cover" />
                           </li>
                         ))}
                       </ul>

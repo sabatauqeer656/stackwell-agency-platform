@@ -1,24 +1,12 @@
 import { z } from 'zod';
+import { optionalUrl, optionalValue, orderRule } from './schemaParts.js';
 
 // Mirrors the server's project rules (server/src/validators/project.validator.js).
 export const RESULTS_MAX = 8;
 export const RESULT_ITEM_MAX = 200;
 export const TECH_MAX = 20;
 export const TECH_ITEM_MAX = 40;
-
-const ORDER_MESSAGE = 'Enter a whole number from 0 to 999';
-const URL_MESSAGE = 'Enter a full web address starting with http:// or https://';
-
-const isHttpUrl = (value) => {
-  try {
-    return ['http:', 'https:'].includes(new URL(value).protocol);
-  } catch {
-    return false;
-  }
-};
-
-// An optional web address: empty is fine, anything else must be a real http(s) address
-const optionalUrl = z.string().trim().max(500, 'At most 500 characters').refine((value) => value === '' || isHttpUrl(value), URL_MESSAGE);
+export const GALLERY_MAX = 10;
 
 const list = (max, itemMax) => z.array(z.object({ value: z.string().trim().max(itemMax, `At most ${itemMax} characters`) })).max(max);
 
@@ -38,11 +26,12 @@ const base = z.object({
   approach: z.string().trim().min(20, 'Approach must be at least 20 characters').max(3000, 'Approach can be at most 3000 characters'),
   results: list(RESULTS_MAX, RESULT_ITEM_MAX),
   techStack: list(TECH_MAX, TECH_ITEM_MAX),
-  coverImage: optionalUrl,
+  coverImage: optionalUrl, // an uploaded image's address
+  images: z.array(z.string()).max(GALLERY_MAX), // the gallery: uploaded image addresses
   liveUrl: optionalUrl,
   completedAt: z.string(), // yyyy-mm-dd from the date input, or empty
   isFeatured: z.boolean(),
-  order: z.number({ error: ORDER_MESSAGE }).int(ORDER_MESSAGE).min(0, ORDER_MESSAGE).max(999, ORDER_MESSAGE),
+  order: orderRule,
   isPublished: z.boolean(),
 });
 
@@ -60,6 +49,7 @@ export const emptyProject = {
   results: [],
   techStack: [],
   coverImage: '',
+  images: [],
   liveUrl: '',
   completedAt: '',
   isFeatured: false,
@@ -81,6 +71,7 @@ export const toFormValues = (project) => ({
   results: toEntries(project.results),
   techStack: toEntries(project.techStack),
   coverImage: project.coverImage ?? '',
+  images: project.images ?? [],
   liveUrl: project.liveUrl ?? '',
   completedAt: project.completedAt ? project.completedAt.slice(0, 10) : '',
   isFeatured: project.isFeatured,
@@ -93,9 +84,7 @@ const cleaned = (entries) => entries.map((entry) => entry.value.trim()).filter(B
 // Form values -> what the API accepts.
 // Optional fields (cover image, live link, completion date): when creating, an empty one is simply left out.
 // When editing, an empty one is sent as null, which tells the server to REMOVE it.
-// The gallery (`images`) is not part of this form, so it is never sent and stays as it is.
 export function toPayload(values, { isEdit }) {
-  const optional = (value) => (value ? value : isEdit ? null : undefined);
   const payload = {
     title: values.title,
     clientName: values.clientName,
@@ -105,9 +94,10 @@ export function toPayload(values, { isEdit }) {
     approach: values.approach,
     results: cleaned(values.results),
     techStack: cleaned(values.techStack),
-    coverImage: optional(values.coverImage),
-    liveUrl: optional(values.liveUrl),
-    completedAt: optional(values.completedAt),
+    coverImage: optionalValue(values.coverImage, isEdit),
+    images: values.images,
+    liveUrl: optionalValue(values.liveUrl, isEdit),
+    completedAt: optionalValue(values.completedAt, isEdit),
     isFeatured: values.isFeatured,
     order: values.order,
     isPublished: values.isPublished,

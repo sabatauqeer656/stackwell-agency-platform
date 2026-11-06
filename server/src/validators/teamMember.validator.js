@@ -25,10 +25,13 @@ export const createTeamMemberSchema = z.object({
   }),
 });
 
+// On update, the optional fields may also be sent as null, which means "remove it".
+const clearable = { photo: fields.photo.nullable(), linkedin: fields.linkedin.nullable(), github: fields.github.nullable() };
+
 export const updateTeamMemberSchema = z.object({
   params: z.object({ id: objectId }),
   body: z
-    .object(fields)
+    .object({ ...fields, ...clearable })
     .partial()
     .refine((body) => Object.keys(body).length > 0, 'Send at least one field to update'),
 });

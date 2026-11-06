@@ -61,10 +61,12 @@ export const router = createBrowserRouter([
               { path: 'projects', ...page(() => import('../pages/admin/Projects.jsx')) },
               { path: 'projects/new', ...page(() => import('../pages/admin/ProjectEdit.jsx')) },
               { path: 'projects/:id', ...page(() => import('../pages/admin/ProjectEdit.jsx')) },
+              { path: 'team', ...page(() => import('../pages/admin/Team.jsx')) },
+              { path: 'team/new', ...page(() => import('../pages/admin/TeamEdit.jsx')) },
+              { path: 'team/:id', ...page(() => import('../pages/admin/TeamEdit.jsx')) },
               // These sections are built one by one in the next steps. Until then each shows a placeholder.
               ...[
                 ['testimonials', 'Testimonials'],
-                ['team', 'Team'],
                 ['faqs', 'FAQs'],
               ].map(([path, title]) => ({ path, handle: { title }, ...page(() => import('../pages/admin/ComingSoon.jsx')) })),
               // Administrators only: the screen shows "no access" to editors (and the API refuses them anyway)
